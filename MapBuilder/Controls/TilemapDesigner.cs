@@ -40,6 +40,7 @@ namespace MapBuilder.Controls {
 			int w = this.panel1.Width - this.Width + 20;
 			int h = this.panel1.Height - this.Height + 20;
 
+			this.hScrollBar1.Value = 0;
 			this.hScrollBar1.Minimum = 0;
 			this.hScrollBar1.Maximum = w > 0 ? w : 0;
 			this.hScrollBar1.Enabled = w > 0;
