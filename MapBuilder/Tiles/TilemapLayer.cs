@@ -9,12 +9,19 @@ namespace MapBuilder.Tiles {
 
 		public int width;
 		public int height;
-		private int[,] tiles;
+		private Tile[,] tiles;
+        public int TilesetID;
 
-		public int this[int x, int y] {
+		public Tile this[int x, int y] {
 			get {
 				if (x < 0 || x >= this.tiles.GetLength(0) || y < 0 || y >= this.tiles.GetLength(1))
-					return -1;
+                {
+                    Tile toReturn = new Tile()
+                    {
+                        TileIndex = -1
+                    };
+                    return toReturn;
+                }
 				return this.tiles[x, y];
 			}
 			set {
@@ -25,7 +32,7 @@ namespace MapBuilder.Tiles {
 		}
 
 		public void UpdateLayerSize() {
-			int[,] newTiles = new int[width, height];
+			Tile[,] newTiles = new Tile[width, height];
 			if (tiles != null) {
 				for (int x = 0; x < tiles.GetLength(0); x++) {
 					if (x >= width)
@@ -46,10 +53,10 @@ namespace MapBuilder.Tiles {
 			g.Clear(Color.Transparent);
 			for (int x = 0; x < width; x++) {
 				for (int y = 0; y < height; y++) {
-					int tile = tiles[x, y];
-					if (tile < 0 || tile >= tileset.Tiles.Count)
+					Tile tile = tiles[x, y];
+					if (tile == null || (tile.TileIndex < 0 || tile.TileIndex >= MapBuilder.Program.FormInstance?.GetTilesetPalette()?.AvailableTilesets[tile.TilesetIndex]?.Tiles.Count))
 						continue;
-					g.DrawImage(tileset.Tiles[tile], new Rectangle(x * size, y * size, size, size));
+					g.DrawImage(MapBuilder.Program.FormInstance?.GetTilesetPalette()?.AvailableTilesets[tile.TilesetIndex]?.Tiles[tile.TileIndex], new Rectangle(x * size, y * size, size, size));
 				}
 			}
 			g.Dispose();

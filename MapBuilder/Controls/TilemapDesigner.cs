@@ -16,13 +16,20 @@ namespace MapBuilder.Controls {
 		private Bitmap background;
 		private Bitmap image;
 		private bool dragging;
+        public TilesetPalette ActivePalette { get; set; }
 
 		public TilemapDesigner() {
 			InitializeComponent();
-			GenerateBackground();
-			GenerateImage();
-			Tilemap.TilemapUpdated += this.Tilemap_TilemapUpdated;
+
+
 		}
+
+        public void FinishInitialisation()
+        {
+            GenerateBackground();
+            GenerateImage();
+            Tilemap.TilemapUpdated += this.Tilemap_TilemapUpdated;
+        }
 
         public void TileSelectEventTrigerred(int id, Tileset sender)
         {
@@ -83,10 +90,14 @@ namespace MapBuilder.Controls {
 				return;
 			int x = (e.X - (e.X % RenderSize)) / RenderSize;
 			int y = (e.Y - (e.Y % RenderSize)) / RenderSize;
-			if (Tilemap.Layers[ActiveLayer][x, y] == Selected)
+			if (Tilemap?.Layers[ActiveLayer][x, y]?.TileIndex == Selected && Tilemap?.Layers[ActiveLayer][x,y]?.TilesetIndex == ActivePalette.GetComboBox1().SelectedIndex)
 				return;
-			Tilemap.Layers[ActiveLayer][x, y] = Selected;
-			Tilemap.Layers[ActiveLayer].GenerateImage(Tileset, RenderSize);
+            Tile newTile = new Tile();
+            newTile.TileIndex = Selected;
+            newTile.TileIndex = ActivePalette.GetComboBox1().SelectedIndex;
+            Tilemap.Layers[ActiveLayer][x, y] = newTile;
+            
+            Tilemap.Layers[ActiveLayer].GenerateImage(ActivePalette.AvailableTilesets[ActivePalette.GetComboBox1().SelectedIndex], RenderSize);
 			Console.WriteLine("Drawing {0} at L{1}X{2}Y{3}", Selected, ActiveLayer, x, y);
 			GenerateImage();
 			panel1.Invalidate();

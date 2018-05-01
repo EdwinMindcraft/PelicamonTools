@@ -55,6 +55,11 @@ namespace MapBuilder.Controls {
             this.comboBox1.SelectedIndex = 0;
         }
 
+        public ComboBox GetComboBox1()
+        {
+            return this.comboBox1;
+        }
+
 		private void vScrollBar1_Scroll(object sender, ScrollEventArgs e) {
 			this.vScrollBar1.Value = e.NewValue;
 			this.yOffset = e.NewValue;
