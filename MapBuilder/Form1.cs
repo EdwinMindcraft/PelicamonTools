@@ -15,7 +15,9 @@ namespace MapBuilder {
 		public Form1() {
 			InitializeComponent();
 			this.tilesetPalette1.Tileset = new Tileset(32);
+			this.tilesetPalette1.Tileset.TileUpdated += (sender, e) => { this.tilemapDesigner1.Tileset = this.tilesetPalette1.Tileset; };
 			this.tilesetPalette1.Tileset.AddTileMap(Properties.Resources.Outside);
+			this.tilemapDesigner1.Tilemap.UpdateTilemapSize();
 			File.WriteAllBytes("./tileset.bin", this.tilesetPalette1.Tileset.ToByteArray());
 		}
 	}
