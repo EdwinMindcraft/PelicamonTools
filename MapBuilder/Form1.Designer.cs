@@ -29,6 +29,8 @@ namespace MapBuilder {
 			this.tilemapDesigner1 = new MapBuilder.Controls.TilemapDesigner();
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.exportAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.binaryFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -70,9 +72,26 @@ namespace MapBuilder {
 			// 
 			// fileToolStripMenuItem
 			// 
+			this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.exportAsToolStripMenuItem});
 			this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
 			this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
 			this.fileToolStripMenuItem.Text = "File";
+			// 
+			// exportAsToolStripMenuItem
+			// 
+			this.exportAsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.binaryFileToolStripMenuItem});
+			this.exportAsToolStripMenuItem.Name = "exportAsToolStripMenuItem";
+			this.exportAsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.exportAsToolStripMenuItem.Text = "Export as...";
+			// 
+			// binaryFileToolStripMenuItem
+			// 
+			this.binaryFileToolStripMenuItem.Name = "binaryFileToolStripMenuItem";
+			this.binaryFileToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.binaryFileToolStripMenuItem.Text = "Binary File";
+			this.binaryFileToolStripMenuItem.Click += new System.EventHandler(this.binaryFileToolStripMenuItem_Click);
 			// 
 			// Form1
 			// 
@@ -98,6 +117,8 @@ namespace MapBuilder {
 		private Controls.TilemapDesigner tilemapDesigner1;
 		private System.Windows.Forms.MenuStrip menuStrip1;
 		private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem exportAsToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem binaryFileToolStripMenuItem;
 	}
 }
 

@@ -27,7 +27,7 @@ namespace MapBuilder.Controls {
 			Tilemap.TilemapUpdated += this.Tilemap_TilemapUpdated;
 		}
 
-        private void Tilemap_TilemapUpdated(object sender, EventArgs e) {
+		private void Tilemap_TilemapUpdated(object sender, EventArgs e) {
 			this.panel1.Size = new Size(RenderSize * this.Tilemap.Width, RenderSize * this.Tilemap.Height);
 			int w = this.panel1.Width - this.Width + 20;
 			int h = this.panel1.Height - this.Height + 20;
@@ -49,7 +49,16 @@ namespace MapBuilder.Controls {
 			this.Tilemap.UpdateTilemapSize(Tileset, RenderSize);
 			this.GenerateBackground();
 			this.GenerateImage();
+			this.UpdateLayerList();
 			this.panel1.Invalidate();
+		}
+
+		public void UpdateLayerList() {
+			layerList.Items.Clear();
+			layerList.SelectedIndices.Clear();
+			for (int i = 0; i < Tilemap.Layers.Count; i++) {
+				layerList.Items.Add(new ListViewItem(i != 0 ? "Layer " + i : "Background"));
+			}
 		}
 
 		private void GenerateImage() {
@@ -129,6 +138,28 @@ namespace MapBuilder.Controls {
 		private void panel1_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e) {
 			if (dragging) {
 				Panel_MouseClick(sender, e);
+			}
+		}
+
+		private void layerList_SelectedIndexChanged(object sender, EventArgs e) {
+			if (layerList.SelectedIndices != null && layerList.SelectedIndices.Count > 0) {
+				this.ActiveLayer = layerList.SelectedIndices[0];
+				this.buttonRemoveLayer.Enabled = this.ActiveLayer != 0;
+			} else {
+				this.buttonRemoveLayer.Enabled = false;
+			}
+		}
+
+		private void buttonAddLayer_Click(object sender, EventArgs e) {
+			this.Tilemap.Layers.Add(new TilemapLayer());
+			this.Redraw();
+		}
+
+		private void buttonRemoveLayer_Click(object sender, EventArgs e) {
+			if (layerList.SelectedIndices != null && layerList.SelectedIndices.Count > 0) {
+				this.buttonRemoveLayer.Enabled = false;
+				this.Tilemap.Layers.RemoveAt(layerList.SelectedIndices[0]);
+				this.Redraw();
 			}
 		}
 	}

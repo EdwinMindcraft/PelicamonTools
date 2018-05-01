@@ -1,8 +1,7 @@
 ﻿using MapBuilder.Tiles;
 using System.Windows.Forms;
 using System.IO;
-
-
+using MapBuilder.Utils;
 
 namespace MapBuilder {
 
@@ -41,7 +40,16 @@ namespace MapBuilder {
 			};
 			this.tilemapDesigner1.Tilemap.UpdateTilemapSize(this.tilesetPalette1.Tileset, this.tilemapDesigner1.RenderSize);
 			this.tilemapDesigner1.ActiveLayer = 0;
+			this.tilemapDesigner1.UpdateLayerList();
 			File.WriteAllBytes("./tileset.bin", this.tilesetPalette1.Tileset.ToByteArray());
+		}
+
+		private void binaryFileToolStripMenuItem_Click(object sender, System.EventArgs e) {
+			SaveFileDialog dialog = new SaveFileDialog();
+			dialog.Filter = "Tile Map Binaries|*.tmb";
+			if (dialog.ShowDialog() == DialogResult.OK) {
+				File.WriteAllBytes(dialog.FileName, IOUtils.GenerateBinaries(this.tilemapDesigner1.Tilemap));
+			}
 		}
 	}
 }

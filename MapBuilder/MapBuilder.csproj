@@ -74,6 +74,7 @@
     <Compile Include="Tiles\TilemapLayer.cs" />
     <Compile Include="Tiles\Tileset.cs" />
     <Compile Include="Utils\ByteUtils.cs" />
+    <Compile Include="Utils\IOUtils.cs" />
     <EmbeddedResource Include="Controls\TilemapDesigner.resx">
       <DependentUpon>TilemapDesigner.cs</DependentUpon>
     </EmbeddedResource>

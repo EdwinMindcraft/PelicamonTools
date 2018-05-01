@@ -18,7 +18,7 @@ namespace MapBuilder.Tiles {
 				return this.tiles[x, y];
 			}
 			set {
-				if (x >= this.tiles.GetLength(0) || y >= this.tiles.GetLength(1))
+				if (x < 0 || x >= this.tiles.GetLength(0) || y < 0 || y >= this.tiles.GetLength(1))
 					return;
 				this.tiles[x, y] = value;
 			}
