@@ -25,42 +25,16 @@ namespace MapBuilder {
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			this.tilesetPalette1 = new MapBuilder.Controls.TilesetPalette();
-			this.tilemapDesigner1 = new MapBuilder.Controls.TilemapDesigner();
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.exportAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.binaryFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.importFromToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.binariesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.tilemapDesigner1 = new MapBuilder.Controls.TilemapDesigner();
+			this.tilesetPalette1 = new MapBuilder.Controls.TilesetPalette();
+			this.binairiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
-			// 
-			// tilesetPalette1
-			// 
-			this.tilesetPalette1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-			this.tilesetPalette1.AutoScroll = true;
-			this.tilesetPalette1.Location = new System.Drawing.Point(12, 27);
-			this.tilesetPalette1.Name = "tilesetPalette1";
-			this.tilesetPalette1.RenderSize = 32;
-			this.tilesetPalette1.Selected = -1;
-			this.tilesetPalette1.Size = new System.Drawing.Size(276, 576);
-			this.tilesetPalette1.TabIndex = 0;
-			// 
-			// tilemapDesigner1
-			// 
-			this.tilemapDesigner1.ActiveLayer = -1;
-			this.tilemapDesigner1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.tilemapDesigner1.Location = new System.Drawing.Point(294, 27);
-			this.tilemapDesigner1.Name = "tilemapDesigner1";
-			this.tilemapDesigner1.RenderSize = 32;
-			this.tilemapDesigner1.Selected = -1;
-			this.tilemapDesigner1.Size = new System.Drawing.Size(856, 576);
-			this.tilemapDesigner1.TabIndex = 1;
-			this.tilemapDesigner1.Tileset = null;
 			// 
 			// menuStrip1
 			// 
@@ -75,8 +49,8 @@ namespace MapBuilder {
 			// fileToolStripMenuItem
 			// 
 			this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.exportAsToolStripMenuItem,
-            this.importFromToolStripMenuItem});
+            this.importFromToolStripMenuItem,
+            this.exportAsToolStripMenuItem});
 			this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
 			this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
 			this.fileToolStripMenuItem.Text = "File";
@@ -99,17 +73,43 @@ namespace MapBuilder {
 			// importFromToolStripMenuItem
 			// 
 			this.importFromToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.binariesToolStripMenuItem});
+            this.binairiesToolStripMenuItem});
 			this.importFromToolStripMenuItem.Name = "importFromToolStripMenuItem";
 			this.importFromToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.importFromToolStripMenuItem.Text = "Import from...";
 			// 
-			// binariesToolStripMenuItem
+			// tilemapDesigner1
 			// 
-			this.binariesToolStripMenuItem.Name = "binariesToolStripMenuItem";
-			this.binariesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-			this.binariesToolStripMenuItem.Text = "Binary File";
-			this.binariesToolStripMenuItem.Click += new System.EventHandler(this.binariesToolStripMenuItem_Click);
+			this.tilemapDesigner1.ActiveLayer = -1;
+			this.tilemapDesigner1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.tilemapDesigner1.Location = new System.Drawing.Point(294, 27);
+			this.tilemapDesigner1.Name = "tilemapDesigner1";
+			this.tilemapDesigner1.RenderSize = 32;
+			this.tilemapDesigner1.Selected = -1;
+			this.tilemapDesigner1.Size = new System.Drawing.Size(856, 576);
+			this.tilemapDesigner1.TabIndex = 1;
+			this.tilemapDesigner1.Tileset = null;
+			// 
+			// tilesetPalette1
+			// 
+			this.tilesetPalette1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+			this.tilesetPalette1.AutoScroll = true;
+			this.tilesetPalette1.Location = new System.Drawing.Point(12, 27);
+			this.tilesetPalette1.Name = "tilesetPalette1";
+			this.tilesetPalette1.RenderSize = 32;
+			this.tilesetPalette1.Selected = -1;
+			this.tilesetPalette1.Size = new System.Drawing.Size(276, 576);
+			this.tilesetPalette1.TabIndex = 0;
+			// 
+			// binairiesToolStripMenuItem
+			// 
+			this.binairiesToolStripMenuItem.Name = "binairiesToolStripMenuItem";
+			this.binairiesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.binairiesToolStripMenuItem.Text = "Binary File";
+			this.binairiesToolStripMenuItem.Click += new System.EventHandler(this.binariesToolStripMenuItem_Click);
 			// 
 			// Form1
 			// 
@@ -139,7 +139,7 @@ namespace MapBuilder {
 		private System.Windows.Forms.ToolStripMenuItem exportAsToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem binaryFileToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem importFromToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem binariesToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem binairiesToolStripMenuItem;
 	}
 }
 

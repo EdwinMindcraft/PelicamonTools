@@ -45,27 +45,43 @@ namespace MapBuilder.Controls {
 			GenerateImage();
 		}
 
-		public void Redraw() {
+		public void Redraw(bool layers = true) {
 			this.Tilemap.UpdateTilemapSize(Program.MasterTileset, RenderSize);
 			this.GenerateBackground();
 			this.GenerateImage();
-			this.UpdateLayerList();
+			if (layers)
+				this.UpdateLayerList();
 			this.panel1.Invalidate();
 		}
 
 		public void UpdateLayerList() {
+			int sel = layerList.SelectedIndices.Count > 0 ? layerList.SelectedIndices[0] : 0;
 			layerList.Items.Clear();
 			layerList.SelectedIndices.Clear();
 			for (int i = 0; i < Tilemap.Layers.Count; i++) {
 				layerList.Items.Add(new ListViewItem(i != 0 ? "Layer " + i : "Background"));
 			}
+			if (sel < Tilemap.Layers.Count)
+				layerList.SelectedIndices.Add(sel);
 		}
 
 		private void GenerateImage() {
 			image = new Bitmap(RenderSize * this.Tilemap.Width, RenderSize * this.Tilemap.Height, PixelFormat.Format32bppArgb);
 			Graphics g = Graphics.FromImage(image);
 			g.DrawImage(background, Point.Empty);
-			Tilemap.Layers.ForEach(l => g.DrawImage(l.LayerImage, 0, 0));
+			for (int i = 0; i < Tilemap.Layers.Count; i++) {
+				TilemapLayer l = Tilemap.Layers[i];
+				if (i > ActiveLayer) {
+					ColorMatrix matrix = new ColorMatrix();
+					matrix.Matrix33 = 0.5F;
+					ImageAttributes attributes = new ImageAttributes();
+					attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+					g.DrawImage(l.LayerImage, new Rectangle(0, 0, l.LayerImage.Width, l.LayerImage.Height), 0, 0, l.LayerImage.Width, l.LayerImage.Height, GraphicsUnit.Pixel, attributes);
+				} else
+					g.DrawImage(l.LayerImage, 0, 0);
+			}
+			g.Dispose();
+
 		}
 
 		private void GenerateBackground() {
@@ -148,6 +164,7 @@ namespace MapBuilder.Controls {
 			} else {
 				this.buttonRemoveLayer.Enabled = false;
 			}
+			Redraw(false);
 		}
 
 		private void buttonAddLayer_Click(object sender, EventArgs e) {
