@@ -25,8 +25,8 @@ namespace MapBuilder.Tiles {
 			Bitmap bitmap = new Bitmap(image);
 			int currentImageID = TileSetImages.Count;
 			TileSetImages.Add(bitmap);
-			for (int i = 0; i < image.Height - TileSize; i += TileSize) {
-				for (int j = 0; j < image.Width - TileSize; j += TileSize) {
+			for (int i = 0; i <= image.Height - TileSize; i += TileSize) {
+				for (int j = 0; j <= image.Width - TileSize; j += TileSize) {
 					Rectangle target = new Rectangle(j, i, TileSize, TileSize);
 					Bitmap tmp = bitmap.Clone(target, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 					if (Tiles.Count == 0) {
