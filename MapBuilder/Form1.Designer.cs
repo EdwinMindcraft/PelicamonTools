@@ -83,13 +83,13 @@ namespace MapBuilder {
 			this.exportAsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.binaryFileToolStripMenuItem});
 			this.exportAsToolStripMenuItem.Name = "exportAsToolStripMenuItem";
-			this.exportAsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.exportAsToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
 			this.exportAsToolStripMenuItem.Text = "Export as...";
 			// 
 			// binaryFileToolStripMenuItem
 			// 
 			this.binaryFileToolStripMenuItem.Name = "binaryFileToolStripMenuItem";
-			this.binaryFileToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.binaryFileToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
 			this.binaryFileToolStripMenuItem.Text = "Binary File";
 			this.binaryFileToolStripMenuItem.Click += new System.EventHandler(this.binaryFileToolStripMenuItem_Click);
 			// 
@@ -104,6 +104,7 @@ namespace MapBuilder {
 			this.MainMenuStrip = this.menuStrip1;
 			this.Name = "Form1";
 			this.Text = "Form1";
+			this.Resize += new System.EventHandler(this.Form1_Resize);
 			this.menuStrip1.ResumeLayout(false);
 			this.menuStrip1.PerformLayout();
 			this.ResumeLayout(false);

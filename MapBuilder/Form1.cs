@@ -53,5 +53,10 @@ namespace MapBuilder {
         {
             return this.tilemapDesigner1;
         }
-    }
+
+		private void Form1_Resize(object sender, System.EventArgs e) {
+			this.tilesetPalette1.Redraw();
+			this.tilemapDesigner1.Redraw();
+		}
+	}
 }

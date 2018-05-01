@@ -15,24 +15,17 @@ namespace MapBuilder.Controls {
             }
         }
 
-       // public List<Tileset> AvailableTilesets = new List<Tileset>();
-
-        private void Tileset_TileUpdated(object sender, EventArgs e) {
-            this.vScrollBar1.Minimum = 0;
-            int i = Tileset.Tiles.Count - 1;
-            int y = (i - (i % DisplayWidth)) / DisplayWidth;
-            this.panel1.Size = new Size(panel1.Size.Width, y * RenderSize);
-			this.UpdateScrollbar();
-            panel1.Invalidate();
-        }
-
 		private void UpdateScrollbar() {
-			int i = Tileset.Tiles.Count - 1;
+			int i = Tileset.Tiles.Count;
 			int y = (i - (i % DisplayWidth)) / DisplayWidth;
-			int max = y + 2 - (panel2.Height - (panel2.Height % RenderSize)) / RenderSize;
-			this.vScrollBar1.Minimum = 0;
-			this.vScrollBar1.Maximum = max > 0 ? max + this.vScrollBar1.LargeChange: 0;
+			int max = y - (panel2.Height - (panel2.Height % RenderSize)) / RenderSize;
 			this.vScrollBar1.Enabled = max > 0;
+			this.vScrollBar1.Value = 0;
+			this.vScrollBar1.Minimum = 0;
+			this.vScrollBar1.Maximum = max > 0 ? max + this.vScrollBar1.LargeChange : 0;
+			this.vScrollBar1.Refresh();
+			this.vScrollBar1.Maximum = max > 0 ? max + this.vScrollBar1.LargeChange : 0;
+			this.panel1.Location = Point.Empty;
 		}
 
         public delegate void TileSelectEvent(int id, Tileset sender);
@@ -54,7 +47,6 @@ namespace MapBuilder.Controls {
             foreach (Tileset set in Program.MasterTileset.Childs)
             {
                 this.comboBox1.Items.Add(set.Name);
-				set.TileUpdated += this.Tileset_TileUpdated;
 			}
             this.comboBox1.SelectedIndex = 0;
         }
@@ -90,9 +82,11 @@ namespace MapBuilder.Controls {
 		}
 
 		public void Redraw() {
-			Tileset_TileUpdated(null, null);
-			panel1.Invalidate();
+			int i = Tileset.Tiles.Count;
+			int y = (i - (i % DisplayWidth)) / DisplayWidth;
+			this.panel1.Size = new Size(panel1.Size.Width, y * RenderSize);
 			this.UpdateScrollbar();
+			panel1.Invalidate();
 		}
 
 		private void panel1_MouseClick(object sender, MouseEventArgs e) {
@@ -112,9 +106,9 @@ namespace MapBuilder.Controls {
 			this.selectedTileset = comboBox1.SelectedIndex;
 			panel1.Invalidate();
 			this.Selected = -1;
-			this.UpdateScrollbar();
 			if (OnTilesetChange != null)
 				OnTilesetChange.Invoke(Tileset);
-        }
+			this.Redraw();
+		}
     }
 }
