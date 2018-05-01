@@ -1,26 +1,17 @@
 ﻿using MapBuilder.Tiles;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace MapBuilder.Controls {
-    public partial class TilesetPalette : UserControl {
-
+	public partial class TilesetPalette : UserControl {
+		
         public Tileset Tileset {
             get {
-                return tileset;
-            }
-            set {
-                tileset = value;
-                Selected = -1;
-                if (tileset != null) {
-                    tileset.TileUpdated += this.Tileset_TileUpdated;
-                }
+				if (selectedTileset < 0 || selectedTileset >= AvailableTilesets.Count)
+					return new Tileset(32);
+                return AvailableTilesets[selectedTileset];
             }
         }
 
@@ -28,7 +19,7 @@ namespace MapBuilder.Controls {
 
         private void Tileset_TileUpdated(object sender, EventArgs e) {
             this.vScrollBar1.Minimum = 0;
-            int i = tileset.Tiles.Count - 1;
+            int i = Tileset.Tiles.Count - 1;
             int y = (i - (i % DisplayWidth)) / DisplayWidth;
             this.vScrollBar1.Maximum = y + 1;
             this.panel1.VerticalScroll.Maximum = (y + 1) * RenderSize;
@@ -40,35 +31,34 @@ namespace MapBuilder.Controls {
         }
 
         public delegate void TileSelectEvent(int id, Tileset sender);
+		public delegate void TilsetSelectEvent(Tileset tileset);
         public event TileSelectEvent OnTileSelect = new TileSelectEvent((id, Tileset) => { });
+		public event TilsetSelectEvent OnTilesetChange = new TilsetSelectEvent((ts) => { });
 
 		public int RenderSize { get; set; } = 64;
 		public int DisplayWidth { get { return (int)Math.Floor((float)panel1.Width / RenderSize); } }
 		private int yOffset = 0;
-		private Tileset tileset;
 		public int Selected { get; set; } = -1;
+		private int selectedTileset = 0;
 
 		public TilesetPalette() {
 			InitializeComponent();
-            this.Tileset = new Tileset(32); //TEMP TILESET, CHANGED IMMEDIATELY AFTER INIT
 		}
 
         public void FinishInitialisation()
         {
-            Tileset = AvailableTilesets[0];
             foreach (Tileset set in AvailableTilesets)
             {
                 this.comboBox1.Items.Add(set.Name);
-            }
+				set.TileUpdated += this.Tileset_TileUpdated;
+			}
             this.comboBox1.SelectedIndex = 0;
         }
-		private void TilesetPalette_Paint(object sender, PaintEventArgs e) {
-		}
 
 		private void vScrollBar1_Scroll(object sender, ScrollEventArgs e) {
 			this.vScrollBar1.Value = e.NewValue;
 			this.yOffset = e.NewValue;
-			panel1.Location = new Point(panel1.Location.X, -this.yOffset * RenderSize);
+			panel1.Location = new Point(0, -this.yOffset * RenderSize);
 		}
 
 		private void panel1_MouseWheel(object sender, MouseEventArgs eventArgs) {
@@ -81,7 +71,7 @@ namespace MapBuilder.Controls {
 		}
 
 		private void panel1_Paint(object sender, PaintEventArgs e) {
-			if (tileset != null) {
+			if (Tileset != null) {
 				for (int i = 0; i < Tileset.Tiles.Count; i++) {
 					int x = i % DisplayWidth;
 					int y = (i - x) / DisplayWidth;
@@ -102,14 +92,15 @@ namespace MapBuilder.Controls {
 			Selected = y * DisplayWidth + x;
 			panel1.Invalidate();
 			if (OnTileSelect != null)
-				OnTileSelect.Invoke(Selected, this.tileset);
+				OnTileSelect.Invoke(Selected, this.Tileset);
 		}
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            this.Tileset = AvailableTilesets[comboBox1.SelectedIndex];
-            panel1.Invalidate();
-
+			this.selectedTileset = comboBox1.SelectedIndex;
+			panel1.Invalidate();
+			if (OnTilesetChange != null)
+				OnTilesetChange.Invoke(Tileset);
         }
     }
 }

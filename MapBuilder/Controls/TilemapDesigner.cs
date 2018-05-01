@@ -1,14 +1,9 @@
 ﻿using System;
 using MapBuilder.Tiles;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.Windows.Input;
-using MapBuilder.Tiles;
+using System.Drawing.Imaging;
 
 namespace MapBuilder.Controls {
 	public partial class TilemapDesigner : UserControl {
@@ -16,12 +11,16 @@ namespace MapBuilder.Controls {
 		public int RenderSize { get; set; } = 32;
 		public Tilemap Tilemap { get; } = new Tilemap(21, 15);
 		public Tileset Tileset { get; set; }
-		public int Selected { get; set; }
+		public int Selected { get; set; } = -1;
+		public int ActiveLayer { get; set; } = -1;
 		private Bitmap background;
+		private Bitmap image;
+		private bool dragging;
 
 		public TilemapDesigner() {
 			InitializeComponent();
 			GenerateBackground();
+			GenerateImage();
 			Tilemap.TilemapUpdated += this.Tilemap_TilemapUpdated;
 		}
 
@@ -50,10 +49,25 @@ namespace MapBuilder.Controls {
 			this.vScrollBar1.Maximum = h > 0 ? h : 0;
 			this.vScrollBar1.Enabled = h > 0;
 			GenerateBackground();
+			GenerateImage();
+		}
+
+		public void Redraw() {
+			this.Tilemap.UpdateTilemapSize(Tileset, RenderSize);
+			this.GenerateBackground();
+			this.GenerateImage();
+			this.panel1.Invalidate();
+		}
+
+		private void GenerateImage() {
+			image = new Bitmap(RenderSize * this.Tilemap.Width, RenderSize * this.Tilemap.Height, PixelFormat.Format32bppArgb);
+			Graphics g = Graphics.FromImage(image);
+			g.DrawImage(background, Point.Empty);
+			Tilemap.Layers.ForEach(l => g.DrawImage(l.LayerImage, 0, 0));
 		}
 
 		private void GenerateBackground() {
-			background = new Bitmap(RenderSize * this.Tilemap.Width, RenderSize * this.Tilemap.Height);
+			background = new Bitmap(RenderSize * this.Tilemap.Width, RenderSize * this.Tilemap.Height, PixelFormat.Format32bppArgb);
 			Graphics g = Graphics.FromImage(background);
 			for (int i = 0; i < panel1.Width; i += RenderSize / 2) {
 				for (int j = 0; j < panel1.Height; j += RenderSize / 2) {
@@ -65,12 +79,21 @@ namespace MapBuilder.Controls {
 		}
 
 		private void Panel_MouseClick(object sender, System.Windows.Forms.MouseEventArgs e) {
-			int x = e.X - (e.X % RenderSize) / RenderSize;
-			int y = e.Y - (e.Y % RenderSize) / RenderSize;
+			if (ActiveLayer < 0 || ActiveLayer >= Tilemap.Layers.Count)
+				return;
+			int x = (e.X - (e.X % RenderSize)) / RenderSize;
+			int y = (e.Y - (e.Y % RenderSize)) / RenderSize;
+			if (Tilemap.Layers[ActiveLayer][x, y] == Selected)
+				return;
+			Tilemap.Layers[ActiveLayer][x, y] = Selected;
+			Tilemap.Layers[ActiveLayer].GenerateImage(Tileset, RenderSize);
+			Console.WriteLine("Drawing {0} at L{1}X{2}Y{3}", Selected, ActiveLayer, x, y);
+			GenerateImage();
+			panel1.Invalidate();
 		}
 
 		private void panel1_Paint(object sender, PaintEventArgs e) {
-			e.Graphics.DrawImage(background, 0, 0);
+			e.Graphics.DrawImage(image, 0, 0);
 		}
 
 
@@ -91,6 +114,20 @@ namespace MapBuilder.Controls {
 			else
 				this.vScrollBar1.Value = Math.Max(Math.Min(e.NewValue, this.vScrollBar1.Maximum), 0);
 			this.panel1.Location = new Point(-this.hScrollBar1.Value, -this.vScrollBar1.Value);
+		}
+
+		private void panel1_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e) {
+			dragging = true;
+		}
+
+		private void panel1_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e) {
+			dragging = false;
+		}
+
+		private void panel1_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e) {
+			if (dragging) {
+				Panel_MouseClick(sender, e);
+			}
 		}
 	}
 }

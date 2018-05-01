@@ -26,7 +26,9 @@ namespace MapBuilder {
 		/// </summary>
 		private void InitializeComponent() {
 			this.tilesetPalette1 = new MapBuilder.Controls.TilesetPalette();
+
 			this.tilemapDesigner1 = new MapBuilder.Controls.TilemapDesigner();
+
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();
@@ -43,7 +45,6 @@ namespace MapBuilder {
 			this.tilesetPalette1.Selected = -1;
 			this.tilesetPalette1.Size = new System.Drawing.Size(244, 576);
 			this.tilesetPalette1.TabIndex = 0;
-			this.tilesetPalette1.Tileset = null;
 			// 
 			// tilemapDesigner1
 			// 

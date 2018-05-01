@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 
 namespace MapBuilder.Tiles {
 	public class Tilemap {
@@ -52,11 +50,17 @@ namespace MapBuilder.Tiles {
 			this.height = height;
 			this.prevW = width;
 			this.prevH = height;
-			this.UpdateTilemapSize();
+			this.layers = new List<TilemapLayer>();
 		}
 
-		public void UpdateTilemapSize() {
-			layers.ForEach((l) => l.UpdateLayerSize());
+		public void UpdateTilemapSize(Tileset ts = null, int size = 0) {
+			layers.ForEach((l) => {
+				l.width = width;
+				l.height = height;
+				l.UpdateLayerSize();
+				if (ts != null)
+					l.GenerateImage(ts, size);
+			});
 			if (TilemapUpdated != null)
 				TilemapUpdated.Invoke(this, new EventArgs());
 		}
