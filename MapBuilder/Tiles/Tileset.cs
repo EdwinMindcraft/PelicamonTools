@@ -8,20 +8,36 @@ namespace MapBuilder.Tiles {
 	public class Tileset {
 
 		public int TileSize { get; }
-		public List<Image> Tiles { get; }
+		public List<Image> Tiles
+        {
+            get
+            {
+                List<Image> TempTiles = new List<Image>(VisibleTiles);
+                TempTiles.AddRange(InvisTiles);
+                return TempTiles;
+            }
+            set
+            {
+                throw new UnauthorizedAccessException("Tiles variable is read only");
+            }
+        }
 		public List<TileData> TilesData { get; }
+        public List<Image> VisibleTiles { get; }
+        public List<Image> InvisTiles { get; }
+        public int Index;
 		public List<Image> TileSetImages { get; }
 		public event EventHandler TileUpdated = new EventHandler((sender, args)=> { });
         public string Name { get; set; }
 
 		public Tileset(int tileSize) {
 			this.TileSize = tileSize;
-			this.Tiles = new List<Image>();
+			this.VisibleTiles = new List<Image>();
+            this.InvisTiles = new List<Image>();
 			this.TilesData = new List<TileData>();
 			this.TileSetImages = new List<Image>();
 		}
 
-		public void AddTileMap(Image image) {
+		public void AddTileMap(Image image, bool visible = true) {
 			Bitmap bitmap = new Bitmap(image);
 			int currentImageID = TileSetImages.Count;
 			TileSetImages.Add(bitmap);
@@ -34,7 +50,14 @@ namespace MapBuilder.Tiles {
 						g.Clear(Color.Transparent);
 						g.Dispose();
 					}
-					Tiles.Add(tmp);
+                    if (visible)
+                    {
+                        VisibleTiles.Add(tmp);
+                    }
+                    else
+                    {
+                        InvisTiles.Add(tmp);
+                    }
 					TilesData.Add(new TileData() { ImageID = currentImageID, X = i / TileSize, Y = j / TileSize, ID = Tiles.Count - 1});
 				}
 			}

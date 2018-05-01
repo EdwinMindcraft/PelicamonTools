@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using System.IO;
 using MapBuilder.Utils;
+using MapBuilder.Controls;
 
 namespace MapBuilder {
 
@@ -13,6 +14,7 @@ namespace MapBuilder {
             for (int i = 0; i < TILESETS_NUMBER; i++)
             {
                 this.tilesetPalette1.AvailableTilesets.Add(new Tileset(32));
+                this.tilesetPalette1.AvailableTilesets[i].Index = i;
                 this.tilesetPalette1.AvailableTilesets[i].TileUpdated += (sender, e) => { this.tilemapDesigner1.Tileset = this.tilesetPalette1.Tileset; };
             }
             //SANITY WARNING
@@ -21,6 +23,7 @@ namespace MapBuilder {
             //Therefore it is recommended to continue with caution
             //WARNING END
 			this.tilesetPalette1.AvailableTilesets[0].AddTileMap(Properties.Resources.Outside);
+            this.tilesetPalette1.AvailableTilesets[0].AddTileMap(Properties.Resources.PlainColors, false);
             this.tilesetPalette1.AvailableTilesets[0].Name = "Outside";
             this.tilesetPalette1.AvailableTilesets[1].AddTileMap(Properties.Resources.PlainColors);
             this.tilesetPalette1.AvailableTilesets[1].Name = "Plain Colors";
@@ -30,7 +33,7 @@ namespace MapBuilder {
 			this.tilesetPalette1.OnTileSelect += (i, tileset) => { this.tilemapDesigner1.Selected = i; };
 			this.tilesetPalette1.OnTilesetChange += (ts) => {
 				this.tilemapDesigner1.Tileset = ts;
-				this.tilemapDesigner1.Redraw();
+				//this.tilemapDesigner1.Redraw();
 			};
 			this.tilesetPalette1.Tileset.AddTileMap(Properties.Resources.Outside);
 			this.tilemapDesigner1.Tilemap.Layers.Add(new TilemapLayer());
@@ -43,7 +46,7 @@ namespace MapBuilder {
 			this.tilemapDesigner1.UpdateLayerList();
 			File.WriteAllBytes("./tileset.bin", this.tilesetPalette1.Tileset.ToByteArray());
 		}
-
+		
 		private void binaryFileToolStripMenuItem_Click(object sender, System.EventArgs e) {
 			SaveFileDialog dialog = new SaveFileDialog();
 			dialog.Filter = "Tile Map Binaries|*.tmb";
@@ -51,5 +54,14 @@ namespace MapBuilder {
 				File.WriteAllBytes(dialog.FileName, IOUtils.GenerateBinaries(this.tilemapDesigner1.Tilemap));
 			}
 		}
-	}
+        public TilesetPalette GetTilesetPalette()
+        {
+            return this.tilesetPalette1;
+        }
+
+        public TilemapDesigner GetTilemapDesigner()
+        {
+            return this.tilemapDesigner1;
+        }
+    }
 }
