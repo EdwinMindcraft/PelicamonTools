@@ -46,7 +46,7 @@ namespace MapBuilder.Controls {
 		}
 
 		public void Redraw() {
-			this.Tilemap.UpdateTilemapSize(Tileset, RenderSize);
+			this.Tilemap.UpdateTilemapSize(Program.MasterTileset, RenderSize);
 			this.GenerateBackground();
 			this.GenerateImage();
 			this.UpdateLayerList();
@@ -92,8 +92,8 @@ namespace MapBuilder.Controls {
 				if (Tilemap.Layers[ActiveLayer][x, y] == target)
 					return;
 				Tilemap.Layers[ActiveLayer][x, y] = target;
-				Tilemap.Layers[ActiveLayer].GenerateImage(MapBuilder.Program.FormInstance.GetTilesetPalette().AvailableTilesets[0], RenderSize);
-				Console.WriteLine("Drawing {0} at L{1}X{2}Y{3}", target, ActiveLayer, x, y);
+				Tilemap.Layers[ActiveLayer].GenerateImage(Program.MasterTileset, RenderSize);
+				//Console.WriteLine("Drawing {0} at L{1}X{2}Y{3}", target, ActiveLayer, x, y);
 				GenerateImage();
 				panel1.Invalidate();
 			} else if (e.Button == MouseButtons.Middle) {

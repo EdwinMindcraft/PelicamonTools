@@ -9,13 +9,13 @@ namespace MapBuilder.Controls {
 		
         public Tileset Tileset {
             get {
-				if (selectedTileset < 0 || selectedTileset >= AvailableTilesets.Count)
+				if (selectedTileset < 0 || selectedTileset >= Program.MasterTileset.Childs.Count)
 					return new Tileset(32);
-                return AvailableTilesets[selectedTileset];
+                return Program.MasterTileset.Childs[selectedTileset];
             }
         }
 
-        public List<Tileset> AvailableTilesets = new List<Tileset>();
+       // public List<Tileset> AvailableTilesets = new List<Tileset>();
 
         private void Tileset_TileUpdated(object sender, EventArgs e) {
             this.vScrollBar1.Minimum = 0;
@@ -47,7 +47,7 @@ namespace MapBuilder.Controls {
 
         public void FinishInitialisation()
         {
-            foreach (Tileset set in AvailableTilesets)
+            foreach (Tileset set in Program.MasterTileset.Childs)
             {
                 this.comboBox1.Items.Add(set.Name);
 				set.TileUpdated += this.Tileset_TileUpdated;
@@ -97,20 +97,21 @@ namespace MapBuilder.Controls {
 			panel1.Invalidate();
             if (OnTileSelect != null)
             {
-                int newSelect = 0;
+                int newSelect = Selected + this.Tileset.StartIndex;
+				/*
                 if (Tileset.Index != 0)
                 {
                     for (int j = 0; j < Tileset.Index; j++)
                     {
                         newSelect += AvailableTilesets[j].VisibleTiles.Count;
                     }
-                    Console.Out.WriteLine("MAX SIZE : " + newSelect.ToString());
+                    //Console.Out.WriteLine("MAX SIZE : " + newSelect.ToString());
                     newSelect += Selected;
                 }
                 else
                 {
                     newSelect = Selected;
-                }
+                }*/
                 OnTileSelect.Invoke(newSelect, this.Tileset);
             }
 		}

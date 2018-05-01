@@ -24,6 +24,7 @@ namespace MapBuilder.Tiles {
 		public List<TileData> TilesData { get; }
         public List<Image> VisibleTiles { get; }
         public List<Image> InvisTiles { get; }
+		public int StartIndex { get; set; }
         public int Index;
 		public List<Image> TileSetImages { get; }
 		public event EventHandler TileUpdated = new EventHandler((sender, args)=> { });
@@ -35,6 +36,7 @@ namespace MapBuilder.Tiles {
             this.InvisTiles = new List<Image>();
 			this.TilesData = new List<TileData>();
 			this.TileSetImages = new List<Image>();
+			this.StartIndex = 0;
 		}
 
 		public void AddTileMap(Image image, bool visible = true) {
