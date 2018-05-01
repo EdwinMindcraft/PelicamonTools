@@ -83,7 +83,7 @@ namespace MapBuilder.Controls {
 				if (Tilemap.Layers[ActiveLayer][x, y] == target)
 					return;
 				Tilemap.Layers[ActiveLayer][x, y] = target;
-				Tilemap.Layers[ActiveLayer].GenerateImage(Tileset, RenderSize);
+				Tilemap.Layers[ActiveLayer].GenerateImage(MapBuilder.Program.FormInstance.GetTilesetPalette().AvailableTilesets[0], RenderSize);
 				Console.WriteLine("Drawing {0} at L{1}X{2}Y{3}", target, ActiveLayer, x, y);
 				GenerateImage();
 				panel1.Invalidate();

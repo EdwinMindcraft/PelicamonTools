@@ -72,12 +72,12 @@ namespace MapBuilder.Controls {
 
 		private void panel1_Paint(object sender, PaintEventArgs e) {
 			if (Tileset != null) {
-				for (int i = 0; i < Tileset.Tiles.Count; i++) {
+				for (int i = 0; i < Tileset.VisibleTiles.Count; i++) {
 					int x = i % DisplayWidth;
 					int y = (i - x) / DisplayWidth;
 					x *= RenderSize;
 					y *= RenderSize;
-					Image tile = Tileset.Tiles[i];
+					Image tile = Tileset.VisibleTiles[i];
 					e.Graphics.DrawImage(tile, new Rectangle(x, y, RenderSize, RenderSize));
 				}
 				if (Selected != -1) {
@@ -95,8 +95,24 @@ namespace MapBuilder.Controls {
 			int y = (int)Math.Floor((float)e.Y / RenderSize);
 			Selected = y * DisplayWidth + x;
 			panel1.Invalidate();
-			if (OnTileSelect != null)
-				OnTileSelect.Invoke(Selected, this.Tileset);
+            if (OnTileSelect != null)
+            {
+                int newSelect = 0;
+                if (Tileset.Index != 0)
+                {
+                    for (int j = 0; j < Tileset.Index; j++)
+                    {
+                        newSelect += AvailableTilesets[j].VisibleTiles.Count;
+                    }
+                    Console.Out.WriteLine("MAX SIZE : " + newSelect.ToString());
+                    newSelect += Selected;
+                }
+                else
+                {
+                    newSelect = Selected;
+                }
+                OnTileSelect.Invoke(newSelect, this.Tileset);
+            }
 		}
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
