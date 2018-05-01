@@ -13,7 +13,7 @@ namespace MapBuilder.Tiles {
 		}
 
 		public void AddChild(Image image, String name) {
-			this.AddTileMap(image, true);
+			this.AddTileMap(image);
 			Tileset child = new Tileset(this.TileSize);
 			int s = 0;
 			Childs.ForEach(ts => s += ts.Tiles.Count);

@@ -35,9 +35,8 @@ namespace MapBuilder {
 			this.tilesetPalette1.OnTileSelect += (i, tileset) => { this.tilemapDesigner1.Selected = i; };
 			this.tilesetPalette1.OnTilesetChange += (ts) => {
 				this.tilemapDesigner1.Tileset = ts;
-				//this.tilemapDesigner1.Redraw();
+				this.tilemapDesigner1.Redraw();
 			};
-			this.tilesetPalette1.Tileset.AddTileMap(Properties.Resources.Outside);
 			this.tilemapDesigner1.Tilemap.Layers.Add(new TilemapLayer());
 			this.tilemapDesigner1.OnTilePick += (i) => {
 				this.tilesetPalette1.Selected = i;
@@ -46,6 +45,8 @@ namespace MapBuilder {
 			this.tilemapDesigner1.Tilemap.UpdateTilemapSize(this.tilesetPalette1.Tileset, this.tilemapDesigner1.RenderSize);
 			this.tilemapDesigner1.ActiveLayer = 0;
 			this.tilemapDesigner1.UpdateLayerList();
+			this.tilemapDesigner1.Redraw();
+			this.tilesetPalette1.Redraw();
 		}
 		
 		private void binaryFileToolStripMenuItem_Click(object sender, System.EventArgs e) {
