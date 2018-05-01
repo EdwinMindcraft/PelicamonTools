@@ -23,18 +23,31 @@
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			this.SuspendLayout();
-			// 
-			// TilemapDesigner
-			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.Name = "TilemapDesigner";
-			this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.TilemapDesigner_MouseClick);
-			this.ResumeLayout(false);
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.SuspendLayout();
+            // 
+            // panel1
+            // 
+            this.panel1.Location = new System.Drawing.Point(4, 4);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(143, 143);
+            this.panel1.TabIndex = 0;
+            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
+            // 
+            // TilemapDesigner
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.panel1);
+            this.Name = "TilemapDesigner";
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.TilemapDesigner_Paint);
+            this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.TilemapDesigner_MouseClick);
+            this.ResumeLayout(false);
 
 		}
 
-		#endregion
-	}
+        #endregion
+
+        private System.Windows.Forms.Panel panel1;
+    }
 }

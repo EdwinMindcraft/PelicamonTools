@@ -10,12 +10,32 @@ using System.Windows.Forms;
 using System.IO;
 using Newtonsoft.Json.Linq;
 
+
+
 namespace MapBuilder {
+
 	public partial class Form1 : Form {
-		public Form1() {
+        const int TILESETS_NUMBER = 2;
+
+        public Form1() {
 			InitializeComponent();
-			this.tilesetPalette1.Tileset = new Tileset(32);
-			this.tilesetPalette1.Tileset.AddTileMap(Properties.Resources.Outside);
+            for (int i = 0; i < TILESETS_NUMBER; i++)
+            {
+                this.tilesetPalette1.AvailableTilesets.Add(new Tileset(32));
+            }
+            //SANITY WARNING
+            //The following code might hurt your soul/eyes/brain (delete as appropriate) due to its ugliness
+            //Creators of this code is not responsible for any kind of physical/emotional/mental/other damage caused by it
+            //Therefore it is recommended to continue with caution
+            //WARNING END
+			this.tilesetPalette1.AvailableTilesets[0].AddTileMap(Properties.Resources.Outside);
+            this.tilesetPalette1.AvailableTilesets[0].Name = "Outside";
+            this.tilesetPalette1.AvailableTilesets[1].AddTileMap(Properties.Resources.PlainColors);
+            this.tilesetPalette1.AvailableTilesets[1].Name = "Plain Colors";
+            this.tilesetPalette1.FinishInitialisation();
+            //You are now exiting the 'Crappy Code Zone'
+            //If you're reading this message, congratulations for making it out alive.
+            this.tilesetPalette1.OnTileSelect += this.tilemapDesigner1.TileSelectEventHandler();
 			File.WriteAllBytes("./tileset.bin", this.tilesetPalette1.Tileset.ToByteArray());
 		}
 	}

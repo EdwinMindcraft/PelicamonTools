@@ -12,6 +12,7 @@ namespace MapBuilder.Tiles {
 		public List<TileData> TilesData { get; }
 		public List<Image> TileSetImages { get; }
 		public event EventHandler TileUpdated = new EventHandler((sender, args)=> { });
+        public string Name { get; set; }
 
 		public Tileset(int tileSize) {
 			this.TileSize = tileSize;

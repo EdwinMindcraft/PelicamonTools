@@ -1,4 +1,6 @@
-﻿namespace MapBuilder {
+﻿using MapBuilder.Controls;
+
+namespace MapBuilder {
 	partial class Form1 {
 		/// <summary>
 		/// Required designer variable.
