@@ -19,7 +19,7 @@ namespace MapBuilder.Controls {
 		protected override CreateParams CreateParams {
 			get {
 				CreateParams cp = base.CreateParams;
-				cp.ExStyle |= WS_EX_COMPOSITED;
+				//cp.ExStyle |= WS_EX_COMPOSITED;
 				return cp;
 			}
 		}

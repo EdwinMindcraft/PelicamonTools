@@ -45,7 +45,6 @@ namespace MapBuilder {
 			this.tilesetPalette1.Selected = -1;
 			this.tilesetPalette1.Size = new System.Drawing.Size(244, 576);
 			this.tilesetPalette1.TabIndex = 0;
-			this.tilesetPalette1.Tileset = null;
 			// 
 			// tilemapDesigner1
 			// 

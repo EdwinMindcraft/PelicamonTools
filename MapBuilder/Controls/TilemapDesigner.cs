@@ -26,6 +26,7 @@ namespace MapBuilder.Controls {
 		public TilemapDesigner() {
 			InitializeComponent();
 			GenerateBackground();
+			GenerateImage();
 			Tilemap.TilemapUpdated += this.Tilemap_TilemapUpdated;
 		}
 
