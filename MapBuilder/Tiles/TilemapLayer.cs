@@ -16,7 +16,7 @@ namespace MapBuilder.Tiles {
 
 		public int this[int x, int y] {
 			get {
-				if (x >= this.tiles.GetLength(0) || y >= this.tiles.GetLength(1))
+				if (x < 0 || x >= this.tiles.GetLength(0) || y < 0 || y >= this.tiles.GetLength(1))
 					return -1;
 				return this.tiles[x, y];
 			}
