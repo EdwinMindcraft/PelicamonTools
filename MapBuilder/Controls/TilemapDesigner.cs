@@ -1,4 +1,5 @@
 ﻿using System;
+using MapBuilder.Tiles;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -28,12 +29,21 @@ namespace MapBuilder.Controls {
 			Tilemap.TilemapUpdated += this.Tilemap_TilemapUpdated;
 		}
 
-		private void Tilemap_TilemapUpdated(object sender, EventArgs e) {
+        public void TileSelectEventTrigerred(int id, Tileset sender)
+        {
+            Console.Out.WriteLine("FROM EVENT : " + id.ToString());
+        }
+
+        public TilesetPalette.TileSelectEvent TileSelectEventHandler()
+        {
+            return TileSelectEventTrigerred;
+        }
+
+        private void Tilemap_TilemapUpdated(object sender, EventArgs e) {
 			this.panel1.Size = new Size(RenderSize * this.Tilemap.Width, RenderSize * this.Tilemap.Height);
 			int w = this.panel1.Width - this.Width + 20;
 			int h = this.panel1.Height - this.Height + 20;
 
-			this.hScrollBar1.Value = 0;
 			this.hScrollBar1.Minimum = 0;
 			this.hScrollBar1.Maximum = w > 0 ? w : 0;
 			this.hScrollBar1.Enabled = w > 0;
