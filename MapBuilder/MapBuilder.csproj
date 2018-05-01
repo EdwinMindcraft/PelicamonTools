@@ -60,6 +60,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tiles\Tileset.cs" />
+    <Compile Include="Utils\ByteUtils.cs" />
     <EmbeddedResource Include="Controls\TilesetPalette.resx">
       <DependentUpon>TilesetPalette.cs</DependentUpon>
     </EmbeddedResource>

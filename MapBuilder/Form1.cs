@@ -7,6 +7,8 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.IO;
+using Newtonsoft.Json.Linq;
 
 namespace MapBuilder {
 	public partial class Form1 : Form {
@@ -14,6 +16,7 @@ namespace MapBuilder {
 			InitializeComponent();
 			this.tilesetPalette1.Tileset = new Tileset(32);
 			this.tilesetPalette1.Tileset.AddTileMap(Properties.Resources.Outside);
+			File.WriteAllBytes("./tileset.bin", this.tilesetPalette1.Tileset.ToByteArray());
 		}
 	}
 }
