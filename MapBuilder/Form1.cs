@@ -22,7 +22,7 @@ namespace MapBuilder {
             //Therefore it is recommended to continue with caution
             //WARNING END
 			this.tilesetPalette1.AvailableTilesets[0].AddTileMap(Properties.Resources.Outside);
-            this.tilesetPalette1.AvailableTilesets[1].AddTileMap(Properties.Resources.PlainColors, false);
+            this.tilesetPalette1.AvailableTilesets[0].AddTileMap(Properties.Resources.PlainColors, false);
             this.tilesetPalette1.AvailableTilesets[0].Name = "Outside";
             this.tilesetPalette1.AvailableTilesets[1].AddTileMap(Properties.Resources.PlainColors);
             this.tilesetPalette1.AvailableTilesets[1].Name = "Plain Colors";
