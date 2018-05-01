@@ -24,6 +24,7 @@
 		/// </summary>
 		private void InitializeComponent() {
 			this.tilesetPalette1 = new MapBuilder.Controls.TilesetPalette();
+			this.tilemapDesigner1 = new MapBuilder.Controls.TilemapDesigner();
 			this.SuspendLayout();
 			// 
 			// tilesetPalette1
@@ -39,11 +40,22 @@
 			this.tilesetPalette1.TabIndex = 0;
 			this.tilesetPalette1.Tileset = null;
 			// 
+			// tilemapDesigner1
+			// 
+			this.tilemapDesigner1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.tilemapDesigner1.Location = new System.Drawing.Point(262, 12);
+			this.tilemapDesigner1.Name = "tilemapDesigner1";
+			this.tilemapDesigner1.Size = new System.Drawing.Size(888, 591);
+			this.tilemapDesigner1.TabIndex = 1;
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(1162, 615);
+			this.Controls.Add(this.tilemapDesigner1);
 			this.Controls.Add(this.tilesetPalette1);
 			this.Name = "Form1";
 			this.Text = "Form1";
@@ -54,6 +66,7 @@
 		#endregion
 
 		private Controls.TilesetPalette tilesetPalette1;
+		private Controls.TilemapDesigner tilemapDesigner1;
 	}
 }
 

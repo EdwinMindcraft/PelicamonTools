@@ -89,6 +89,8 @@ namespace MapBuilder.Controls {
 			int y = (int)Math.Floor((float)e.Y / RenderSize);
 			Selected = y * DisplayWidth + x;
 			panel1.Invalidate();
+			if (OnTileSelect != null)
+				OnTileSelect.Invoke(Selected);
 		}
 	}
 }
