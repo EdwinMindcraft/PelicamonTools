@@ -26,9 +26,9 @@ namespace MapBuilder.Tiles {
 				this.UpdateTilemapSize();
 			}
 		}
-		public TileData[] Tiles {
+		public List<TilemapLayer> Layers {
 			get {
-				return this.tiles;
+				return this.layers;
 			}
 		}
 		public Size Size { get {
@@ -40,7 +40,7 @@ namespace MapBuilder.Tiles {
 		private int prevH;
 		private int width;
 		private int height;
-		private TileData[] tiles;
+		private List<TilemapLayer> layers;
 		public event EventHandler TilemapUpdated = (sender, e) => { };
 
 		public Tilemap(int width, int height) {
@@ -50,24 +50,13 @@ namespace MapBuilder.Tiles {
 				throw new ArgumentNullException(String.Format("Width and Heigth cannot be 0 ({0}x{1})", width, height));
 			this.width = width;
 			this.height = height;
-			this.prevH = width;
-			this.prevW = height;
+			this.prevW = width;
+			this.prevH = height;
 			this.UpdateTilemapSize();
 		}
 
 		public void UpdateTilemapSize() {
-			TileData[] newTiles = new TileData[width * height];
-			if (tiles != null) {
-				for (int i = 0; i < tiles.Length; i++) {
-					int x = i % prevW;
-					int y = (i - x) / prevH;
-					int newID = x + y * width;
-					if (newID > newTiles.Length)
-						continue;
-					newTiles[newID] = tiles[i];
-				}
-			}
-			this.tiles = newTiles;
+			layers.ForEach((l) => l.UpdateLayerSize());
 			if (TilemapUpdated != null)
 				TilemapUpdated.Invoke(this, new EventArgs());
 		}
