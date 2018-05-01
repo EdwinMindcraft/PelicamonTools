@@ -71,9 +71,15 @@ namespace MapBuilder.Controls {
 			g.DrawImage(background, Point.Empty);
 			for (int i = 0; i < Tilemap.Layers.Count; i++) {
 				TilemapLayer l = Tilemap.Layers[i];
-				if (i > ActiveLayer) {
+				if (i != ActiveLayer && ActiveLayer != -1) {
 					ColorMatrix matrix = new ColorMatrix();
-					matrix.Matrix33 = 0.5F;
+					if (i > ActiveLayer)
+						matrix.Matrix33 = 0.5F;
+					else {
+						matrix.Matrix00 = 0.5F;
+						matrix.Matrix11 = 0.5F;
+						matrix.Matrix22 = 0.5F;
+					}
 					ImageAttributes attributes = new ImageAttributes();
 					attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
 					g.DrawImage(l.LayerImage, new Rectangle(0, 0, l.LayerImage.Width, l.LayerImage.Height), 0, 0, l.LayerImage.Width, l.LayerImage.Height, GraphicsUnit.Pixel, attributes);
@@ -163,6 +169,7 @@ namespace MapBuilder.Controls {
 				this.buttonRemoveLayer.Enabled = this.ActiveLayer != 0;
 			} else {
 				this.buttonRemoveLayer.Enabled = false;
+				this.ActiveLayer = -1;
 			}
 			Redraw(false);
 		}
