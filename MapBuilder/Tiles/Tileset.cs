@@ -27,7 +27,13 @@ namespace MapBuilder.Tiles {
 			for (int i = 0; i < image.Height - TileSize; i += TileSize) {
 				for (int j = 0; j < image.Width - TileSize; j += TileSize) {
 					Rectangle target = new Rectangle(j, i, TileSize, TileSize);
-					Tiles.Add(bitmap.Clone(target, System.Drawing.Imaging.PixelFormat.DontCare));
+					Bitmap tmp = bitmap.Clone(target, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+					if (Tiles.Count == 0) {
+						Graphics g = Graphics.FromImage(tmp);
+						g.Clear(Color.Transparent);
+						g.Dispose();
+					}
+					Tiles.Add(tmp);
 					TilesData.Add(new TileData() { ImageID = currentImageID, X = i / TileSize, Y = j / TileSize, ID = Tiles.Count - 1});
 				}
 			}

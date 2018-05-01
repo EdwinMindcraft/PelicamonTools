@@ -24,7 +24,9 @@
 		/// </summary>
 		private void InitializeComponent() {
 			this.tilesetPalette1 = new MapBuilder.Controls.TilesetPalette();
+
 			this.tilemapDesigner1 = new MapBuilder.Controls.TilemapDesigner();
+
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();

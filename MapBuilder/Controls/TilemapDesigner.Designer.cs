@@ -26,7 +26,7 @@ namespace MapBuilder.Controls {
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			this.panel1 = new System.Windows.Forms.Panel();
+			this.panel1 = new DoubleBufferedPanel();
 			this.hScrollBar1 = new System.Windows.Forms.HScrollBar();
 			this.vScrollBar1 = new System.Windows.Forms.VScrollBar();
 			this.panel2 = new System.Windows.Forms.Panel();
@@ -39,6 +39,10 @@ namespace MapBuilder.Controls {
 			this.panel1.Size = new System.Drawing.Size(64, 64);
 			this.panel1.TabIndex = 0;
 			this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
+			this.panel1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Panel_MouseClick);
+			this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
+			this.panel1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseMove);
+			this.panel1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseUp);
 			this.panel1.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.TilemapDesigner_MouseWheel);
 			// 
 			// hScrollBar1

@@ -24,7 +24,7 @@
 		/// </summary>
 		private void InitializeComponent() {
 			this.vScrollBar1 = new System.Windows.Forms.VScrollBar();
-			this.panel1 = new System.Windows.Forms.Panel();
+			this.panel1 = new DoubleBufferedPanel();
 			this.SuspendLayout();
 			// 
 			// vScrollBar1
