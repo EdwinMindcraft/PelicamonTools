@@ -32,7 +32,7 @@ namespace MapBuilder {
 			this.tilesetPalette1.OnTileSelect += (i, tileset) => { this.tilemapDesigner1.Selected = i; };
 			this.tilesetPalette1.OnTilesetChange += (ts) => {
 				this.tilemapDesigner1.Tileset = ts;
-				this.tilemapDesigner1.Redraw();
+				//this.tilemapDesigner1.Redraw();
 			};
 			this.tilesetPalette1.Tileset.AddTileMap(Properties.Resources.Outside);
 			this.tilemapDesigner1.Tilemap.Layers.Add(new TilemapLayer());
