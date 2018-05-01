@@ -31,6 +31,8 @@ namespace MapBuilder {
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.exportAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.binaryFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.importFromToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.binariesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -73,7 +75,8 @@ namespace MapBuilder {
 			// fileToolStripMenuItem
 			// 
 			this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.exportAsToolStripMenuItem});
+            this.exportAsToolStripMenuItem,
+            this.importFromToolStripMenuItem});
 			this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
 			this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
 			this.fileToolStripMenuItem.Text = "File";
@@ -83,15 +86,30 @@ namespace MapBuilder {
 			this.exportAsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.binaryFileToolStripMenuItem});
 			this.exportAsToolStripMenuItem.Name = "exportAsToolStripMenuItem";
-			this.exportAsToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
+			this.exportAsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.exportAsToolStripMenuItem.Text = "Export as...";
 			// 
 			// binaryFileToolStripMenuItem
 			// 
 			this.binaryFileToolStripMenuItem.Name = "binaryFileToolStripMenuItem";
-			this.binaryFileToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
+			this.binaryFileToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.binaryFileToolStripMenuItem.Text = "Binary File";
 			this.binaryFileToolStripMenuItem.Click += new System.EventHandler(this.binaryFileToolStripMenuItem_Click);
+			// 
+			// importFromToolStripMenuItem
+			// 
+			this.importFromToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.binariesToolStripMenuItem});
+			this.importFromToolStripMenuItem.Name = "importFromToolStripMenuItem";
+			this.importFromToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.importFromToolStripMenuItem.Text = "Import from...";
+			// 
+			// binariesToolStripMenuItem
+			// 
+			this.binariesToolStripMenuItem.Name = "binariesToolStripMenuItem";
+			this.binariesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.binariesToolStripMenuItem.Text = "Binary File";
+			this.binariesToolStripMenuItem.Click += new System.EventHandler(this.binariesToolStripMenuItem_Click);
 			// 
 			// Form1
 			// 
@@ -120,6 +138,8 @@ namespace MapBuilder {
 		private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem exportAsToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem binaryFileToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem importFromToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem binariesToolStripMenuItem;
 	}
 }
 

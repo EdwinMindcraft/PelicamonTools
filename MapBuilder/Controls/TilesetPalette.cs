@@ -20,12 +20,12 @@ namespace MapBuilder.Controls {
 			int y = (i - (i % DisplayWidth)) / DisplayWidth;
 			int max = y - (panel2.Height - (panel2.Height % RenderSize)) / RenderSize;
 			this.vScrollBar1.Enabled = max > 0;
-			this.vScrollBar1.Value = 0;
 			this.vScrollBar1.Minimum = 0;
 			this.vScrollBar1.Maximum = max > 0 ? max + this.vScrollBar1.LargeChange : 0;
 			this.vScrollBar1.Refresh();
 			this.vScrollBar1.Maximum = max > 0 ? max + this.vScrollBar1.LargeChange : 0;
-			this.panel1.Location = Point.Empty;
+			this.vScrollBar1.Value = this.vScrollBar1.Value > this.vScrollBar1.Maximum ? 0 : this.vScrollBar1.Value;
+			this.panel1.Location = new Point(0, -this.vScrollBar1.Value * RenderSize);
 		}
 
         public delegate void TileSelectEvent(int id, Tileset sender);

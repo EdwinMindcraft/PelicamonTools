@@ -36,5 +36,31 @@ namespace MapBuilder.Utils {
 			}
 			return bytes;
 		}
+
+		public static TilemapLayer LoadLayerFromBinaries(byte[] bytes, int start = 0) {
+			TilemapLayer layer = new TilemapLayer();
+			int w = layer.width = ByteUtils.GetInteger(start + 0, bytes);
+			int h = layer.height = ByteUtils.GetInteger(start + 4, bytes);
+			layer.UpdateLayerSize();
+			for (int i = 0; i < h; i++) {
+				for (int j = 0; j < w; j++) {
+					int target = start + (i * layer.width + j) * 4 + 8;
+					layer[j, i] = ByteUtils.GetInteger(target, bytes);
+				}
+			}
+			return layer;
+		}
+
+		public static Tilemap LoadTilemapFromBinaries(byte[] bytes) {
+			int s = ByteUtils.GetInteger(0, bytes);
+			int w = ByteUtils.GetInteger(4, bytes);
+			int h = ByteUtils.GetInteger(8, bytes);
+			Tilemap map = new Tilemap(w, h);
+			var inc = 8 + w * h * 4;
+			for (int i = 0; i < s; i++) {
+				map.Layers.Add(LoadLayerFromBinaries(bytes, start: 12 + i * inc));
+			}
+			return map;
+		}
 	}
 }

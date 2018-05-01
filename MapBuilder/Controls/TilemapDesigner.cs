@@ -9,7 +9,7 @@ namespace MapBuilder.Controls {
 	public partial class TilemapDesigner : UserControl {
 
 		public int RenderSize { get; set; } = 32;
-		public Tilemap Tilemap { get; } = new Tilemap(21, 15);
+		public Tilemap Tilemap { get; set; } = new Tilemap(21, 15);
 		public Tileset Tileset { get; set; }
 		public int Selected { get; set; } = -1;
 		public int ActiveLayer { get; set; } = -1;

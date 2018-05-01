@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using System.IO;
 using MapBuilder.Utils;
 using MapBuilder.Controls;
+using System;
 
 namespace MapBuilder {
 
@@ -44,7 +45,23 @@ namespace MapBuilder {
 				File.WriteAllBytes(dialog.FileName, IOUtils.GenerateBinaries(this.tilemapDesigner1.Tilemap));
 			}
 		}
-        public TilesetPalette GetTilesetPalette()
+
+		private void binariesToolStripMenuItem_Click(object sender, System.EventArgs e) {
+			OpenFileDialog dialog = new OpenFileDialog();
+			dialog.Filter = "Tile Map Binaries|*.tmb";
+			if (dialog.ShowDialog() == DialogResult.OK) {
+				byte[] bytes = File.ReadAllBytes(dialog.FileName);
+				try {
+					Tilemap map = IOUtils.LoadTilemapFromBinaries(bytes);
+					this.tilemapDesigner1.Tilemap = map;
+					this.Redraw();
+				} catch(Exception ex) {
+					Console.WriteLine(ex);
+				}
+			}
+		}
+
+		public TilesetPalette GetTilesetPalette()
         {
             return this.tilesetPalette1;
         }
@@ -54,9 +71,13 @@ namespace MapBuilder {
             return this.tilemapDesigner1;
         }
 
-		private void Form1_Resize(object sender, System.EventArgs e) {
+		private void Redraw() {
 			this.tilesetPalette1.Redraw();
 			this.tilemapDesigner1.Redraw();
+		}
+
+		private void Form1_Resize(object sender, System.EventArgs e) {
+			Redraw();
 		}
 	}
 }
