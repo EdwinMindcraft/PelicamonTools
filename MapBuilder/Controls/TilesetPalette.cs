@@ -21,14 +21,19 @@ namespace MapBuilder.Controls {
             this.vScrollBar1.Minimum = 0;
             int i = Tileset.Tiles.Count - 1;
             int y = (i - (i % DisplayWidth)) / DisplayWidth;
-            this.vScrollBar1.Maximum = y + 1;
-            this.panel1.VerticalScroll.Maximum = (y + 1) * RenderSize;
-            this.panel1.VerticalScroll.Minimum = 0;
-            this.panel1.VerticalScroll.Enabled = true;
-            this.panel1.VerticalScroll.Visible = false;
             this.panel1.Size = new Size(panel1.Size.Width, y * RenderSize);
+			this.UpdateScrollbar();
             panel1.Invalidate();
         }
+
+		private void UpdateScrollbar() {
+			int i = Tileset.Tiles.Count - 1;
+			int y = (i - (i % DisplayWidth)) / DisplayWidth;
+			int max = y + 2 - (panel2.Height - (panel2.Height % RenderSize)) / RenderSize;
+			this.vScrollBar1.Minimum = 0;
+			this.vScrollBar1.Maximum = max > 0 ? max + this.vScrollBar1.LargeChange: 0;
+			this.vScrollBar1.Enabled = max > 0;
+		}
 
         public delegate void TileSelectEvent(int id, Tileset sender);
 		public delegate void TilsetSelectEvent(Tileset tileset);
@@ -37,7 +42,6 @@ namespace MapBuilder.Controls {
 
 		public int RenderSize { get; set; } = 64;
 		public int DisplayWidth { get { return (int)Math.Floor((float)panel1.Width / RenderSize); } }
-		private int yOffset = 0;
 		public int Selected { get; set; } = -1;
 		private int selectedTileset = 0;
 
@@ -57,16 +61,15 @@ namespace MapBuilder.Controls {
 
 		private void vScrollBar1_Scroll(object sender, ScrollEventArgs e) {
 			this.vScrollBar1.Value = e.NewValue;
-			this.yOffset = e.NewValue;
-			panel1.Location = new Point(0, -this.yOffset * RenderSize);
+			panel1.Location = new Point(0, -this.vScrollBar1.Value * RenderSize);
 		}
 
 		private void panel1_MouseWheel(object sender, MouseEventArgs eventArgs) {
 			int newVal = this.vScrollBar1.Value - eventArgs.Delta / 120;
 			if (newVal < 0)
 				newVal = 0;
-			if (newVal > this.vScrollBar1.Maximum)
-				newVal = this.vScrollBar1.Maximum;
+			if (newVal > this.vScrollBar1.Maximum - this.vScrollBar1.LargeChange + 1)
+				newVal = this.vScrollBar1.Maximum - this.vScrollBar1.LargeChange + 1;
 			vScrollBar1_Scroll(panel1, new ScrollEventArgs(ScrollEventType.LargeDecrement, newVal));
 		}
 
@@ -89,6 +92,7 @@ namespace MapBuilder.Controls {
 		public void Redraw() {
 			Tileset_TileUpdated(null, null);
 			panel1.Invalidate();
+			this.UpdateScrollbar();
 		}
 
 		private void panel1_MouseClick(object sender, MouseEventArgs e) {
@@ -108,6 +112,7 @@ namespace MapBuilder.Controls {
 			this.selectedTileset = comboBox1.SelectedIndex;
 			panel1.Invalidate();
 			this.Selected = -1;
+			this.UpdateScrollbar();
 			if (OnTilesetChange != null)
 				OnTilesetChange.Invoke(Tileset);
         }
