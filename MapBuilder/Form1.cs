@@ -22,6 +22,7 @@ namespace MapBuilder {
             for (int i = 0; i < TILESETS_NUMBER; i++)
             {
                 this.tilesetPalette1.AvailableTilesets.Add(new Tileset(32));
+                this.tilesetPalette1.AvailableTilesets[i].TileUpdated += (sender, e) => { this.tilemapDesigner1.Tileset = this.tilesetPalette1.Tileset; };
             }
             //SANITY WARNING
             //The following code might hurt your soul/eyes/brain (delete as appropriate) due to its ugliness
@@ -35,7 +36,9 @@ namespace MapBuilder {
             this.tilesetPalette1.FinishInitialisation();
             //You are now exiting the 'Crappy Code Zone'
             //If you're reading this message, congratulations for making it out alive.
-            this.tilesetPalette1.OnTileSelect += this.tilemapDesigner1.TileSelectEventHandler();
+			this.tilesetPalette1.OnTileSelect += (i, tileset) => { this.tilemapDesigner1.Selected = i; };
+			this.tilesetPalette1.Tileset.AddTileMap(Properties.Resources.Outside);
+			this.tilemapDesigner1.Tilemap.UpdateTilemapSize();
 			File.WriteAllBytes("./tileset.bin", this.tilesetPalette1.Tileset.ToByteArray());
 		}
 	}
