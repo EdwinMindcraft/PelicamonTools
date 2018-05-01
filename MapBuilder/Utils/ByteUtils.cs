@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-
-namespace MapBuilder.Utils {
+﻿namespace MapBuilder.Utils {
 	public static class ByteUtils {
 		public static void SetInteger(int position, ref byte[] bytes, int value) {
 			bytes[position + 0] = (byte) (value & 0xFF000000);

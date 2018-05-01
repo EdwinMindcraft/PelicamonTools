@@ -1,14 +1,8 @@
 ﻿using System;
 using MapBuilder.Tiles;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.Windows.Input;
-using MapBuilder.Tiles;
 using System.Drawing.Imaging;
 
 namespace MapBuilder.Controls {
@@ -55,6 +49,13 @@ namespace MapBuilder.Controls {
 			this.vScrollBar1.Enabled = h > 0;
 			GenerateBackground();
 			GenerateImage();
+		}
+
+		public void Redraw() {
+			this.Tilemap.UpdateTilemapSize(Tileset, RenderSize);
+			this.GenerateBackground();
+			this.GenerateImage();
+			this.panel1.Invalidate();
 		}
 
 		private void GenerateImage() {

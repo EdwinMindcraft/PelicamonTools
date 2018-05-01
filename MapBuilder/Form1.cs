@@ -1,14 +1,6 @@
 ﻿using MapBuilder.Tiles;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.IO;
-using Newtonsoft.Json.Linq;
 
 
 
@@ -37,6 +29,10 @@ namespace MapBuilder {
             //You are now exiting the 'Crappy Code Zone'
             //If you're reading this message, congratulations for making it out alive.
 			this.tilesetPalette1.OnTileSelect += (i, tileset) => { this.tilemapDesigner1.Selected = i; };
+			this.tilesetPalette1.OnTilesetChange += (ts) => {
+				this.tilemapDesigner1.Tileset = ts;
+				this.tilemapDesigner1.Redraw();
+			};
 			this.tilesetPalette1.Tileset.AddTileMap(Properties.Resources.Outside);
 			this.tilemapDesigner1.Tilemap.Layers.Add(new TilemapLayer());
 			this.tilemapDesigner1.Tilemap.UpdateTilemapSize(this.tilesetPalette1.Tileset, this.tilemapDesigner1.RenderSize);

@@ -1,15 +1,11 @@
 ﻿using MapBuilder.Tiles;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace MapBuilder.Controls {
-    public partial class TilesetPalette : UserControl {
+	public partial class TilesetPalette : UserControl {
 		
         public Tileset Tileset {
             get {
@@ -35,7 +31,9 @@ namespace MapBuilder.Controls {
         }
 
         public delegate void TileSelectEvent(int id, Tileset sender);
+		public delegate void TilsetSelectEvent(Tileset tileset);
         public event TileSelectEvent OnTileSelect = new TileSelectEvent((id, Tileset) => { });
+		public event TilsetSelectEvent OnTilesetChange = new TilsetSelectEvent((ts) => { });
 
 		public int RenderSize { get; set; } = 64;
 		public int DisplayWidth { get { return (int)Math.Floor((float)panel1.Width / RenderSize); } }
@@ -100,8 +98,9 @@ namespace MapBuilder.Controls {
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
 			this.selectedTileset = comboBox1.SelectedIndex;
-            panel1.Invalidate();
-			this.Invalidate();
+			panel1.Invalidate();
+			if (OnTilesetChange != null)
+				OnTilesetChange.Invoke(Tileset);
         }
     }
 }
