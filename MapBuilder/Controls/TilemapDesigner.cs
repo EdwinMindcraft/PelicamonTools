@@ -17,22 +17,15 @@ namespace MapBuilder.Controls {
 		private Bitmap image;
 		private bool dragging;
 
+		public delegate void SelectEvent(int i);
+		public event SelectEvent OnTilePick = new SelectEvent((i) => { });
+
 		public TilemapDesigner() {
 			InitializeComponent();
 			GenerateBackground();
 			GenerateImage();
 			Tilemap.TilemapUpdated += this.Tilemap_TilemapUpdated;
 		}
-
-        public void TileSelectEventTrigerred(int id, Tileset sender)
-        {
-            Console.Out.WriteLine("FROM EVENT : " + id.ToString());
-        }
-
-        public TilesetPalette.TileSelectEvent TileSelectEventHandler()
-        {
-            return TileSelectEventTrigerred;
-        }
 
         private void Tilemap_TilemapUpdated(object sender, EventArgs e) {
 			this.panel1.Size = new Size(RenderSize * this.Tilemap.Width, RenderSize * this.Tilemap.Height);
@@ -82,13 +75,22 @@ namespace MapBuilder.Controls {
 				return;
 			int x = (e.X - (e.X % RenderSize)) / RenderSize;
 			int y = (e.Y - (e.Y % RenderSize)) / RenderSize;
-			if (Tilemap.Layers[ActiveLayer][x, y] == Selected)
-				return;
-			Tilemap.Layers[ActiveLayer][x, y] = Selected;
-			Tilemap.Layers[ActiveLayer].GenerateImage(Tileset, RenderSize);
-			Console.WriteLine("Drawing {0} at L{1}X{2}Y{3}", Selected, ActiveLayer, x, y);
-			GenerateImage();
-			panel1.Invalidate();
+			int target = Selected;
+			if (e.Button == MouseButtons.Left || e.Button == MouseButtons.Right) {
+				if (e.Button == MouseButtons.Right)
+					target = 0;
+				if (Tilemap.Layers[ActiveLayer][x, y] == target)
+					return;
+				Tilemap.Layers[ActiveLayer][x, y] = target;
+				Tilemap.Layers[ActiveLayer].GenerateImage(Tileset, RenderSize);
+				Console.WriteLine("Drawing {0} at L{1}X{2}Y{3}", target, ActiveLayer, x, y);
+				GenerateImage();
+				panel1.Invalidate();
+			} else if (e.Button == MouseButtons.Middle) {
+				Selected = Tilemap.Layers[ActiveLayer][x, y];
+				if (OnTilePick != null)
+					OnTilePick.Invoke(Selected);
+			}
 		}
 
 		private void panel1_Paint(object sender, PaintEventArgs e) {

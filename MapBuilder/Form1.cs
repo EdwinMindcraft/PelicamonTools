@@ -35,6 +35,10 @@ namespace MapBuilder {
 			};
 			this.tilesetPalette1.Tileset.AddTileMap(Properties.Resources.Outside);
 			this.tilemapDesigner1.Tilemap.Layers.Add(new TilemapLayer());
+			this.tilemapDesigner1.OnTilePick += (i) => {
+				this.tilesetPalette1.Selected = i;
+				this.tilesetPalette1.Redraw();
+			};
 			this.tilemapDesigner1.Tilemap.UpdateTilemapSize(this.tilesetPalette1.Tileset, this.tilemapDesigner1.RenderSize);
 			this.tilemapDesigner1.ActiveLayer = 0;
 			File.WriteAllBytes("./tileset.bin", this.tilesetPalette1.Tileset.ToByteArray());

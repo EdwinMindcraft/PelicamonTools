@@ -86,6 +86,10 @@ namespace MapBuilder.Controls {
 			}
 		}
 
+		public void Redraw() {
+			panel1.Invalidate();
+		}
+
 		private void panel1_MouseClick(object sender, MouseEventArgs e) {
 			int x = (int)Math.Floor((float)e.X / RenderSize);
 			int y = (int)Math.Floor((float)e.Y / RenderSize);
