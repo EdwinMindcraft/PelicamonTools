@@ -99,7 +99,6 @@ namespace MapBuilder {
 			this.tilemapDesigner1.Location = new System.Drawing.Point(294, 27);
 			this.tilemapDesigner1.Name = "tilemapDesigner1";
 			this.tilemapDesigner1.RenderSize = 32;
-			this.tilemapDesigner1.Selected = -1;
 			this.tilemapDesigner1.Size = new System.Drawing.Size(856, 576);
 			this.tilemapDesigner1.TabIndex = 1;
 			this.tilemapDesigner1.Tileset = null;
@@ -112,7 +111,6 @@ namespace MapBuilder {
 			this.tilesetPalette1.Location = new System.Drawing.Point(12, 27);
 			this.tilesetPalette1.Name = "tilesetPalette1";
 			this.tilesetPalette1.RenderSize = 32;
-			this.tilesetPalette1.Selected = -1;
 			this.tilesetPalette1.Size = new System.Drawing.Size(276, 576);
 			this.tilesetPalette1.TabIndex = 0;
 			// 
