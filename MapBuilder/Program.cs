@@ -27,6 +27,7 @@ namespace MapBuilder {
             MasterTileset.AddChild("Plain Colors", Properties.Resources.PlainColors);
             MasterTileset.AddChild("Manual Convert", Properties.Resources.TilesConverted);
             MasterTileset.AddChild("Size Test", 48, Properties.Resources.Tiles48);
+            MasterTileset.AddChild("Poke Center", Properties.Resources.Poke_Centre_interiorfix);
             FormInstance = new Form1();
             Application.Run(FormInstance);
             #endregion;

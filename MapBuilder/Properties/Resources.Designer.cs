@@ -83,6 +83,16 @@ namespace MapBuilder.Properties {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Poke_Centre_interiorfix {
+            get {
+                object obj = ResourceManager.GetObject("Poke_Centre_interiorfix", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Tiles48 {
             get {
                 object obj = ResourceManager.GetObject("Tiles48", resourceCulture);

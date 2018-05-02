@@ -184,5 +184,8 @@
   <ItemGroup>
     <None Include="Resources\TilesConverted.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Poke_Centre_interiorfix.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
