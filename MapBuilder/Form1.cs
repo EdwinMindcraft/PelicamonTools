@@ -4,6 +4,7 @@ using System.IO;
 using MapBuilder.Utils;
 using MapBuilder.Controls;
 using System;
+using System.Collections.Generic;
 
 namespace MapBuilder {
 
@@ -44,6 +45,7 @@ namespace MapBuilder {
 			if (dialog.ShowDialog() == DialogResult.OK) {
 				File.WriteAllBytes(dialog.FileName, IOUtils.GenerateBinaries(this.tilemapDesigner1.Tilemap));
 			}
+			dialog.Dispose();
 		}
 
 		private void binariesToolStripMenuItem_Click(object sender, EventArgs e) {
@@ -60,6 +62,7 @@ namespace MapBuilder {
 					Console.WriteLine(ex);
 				}
 			}
+			dialog.Dispose();
 		}
 
 		public TilesetPalette GetTilesetPalette()
@@ -86,6 +89,41 @@ namespace MapBuilder {
 			if (dialog.ShowDialog() == DialogResult.OK) {
 				this.tilemapDesigner1.Tilemap.Size = new System.Drawing.Size(dialog.MapWidth, dialog.MapHeight);
 			}
+			dialog.Dispose();
+		}
+
+		private void tilesetToolStripMenuItem_Click(object sender, EventArgs e) {
+			TilesetEditor editor = new TilesetEditor();
+			editor.ShowDialog();
+			editor.Dispose();
+		}
+
+		private void tilesetInfoToolStripMenuItem1_Click(object sender, EventArgs e) {
+			SaveFileDialog dialog = new SaveFileDialog();
+			dialog.Filter = "Tile Set Binaries|*.tsb";
+			if (dialog.ShowDialog() == DialogResult.OK) {
+				Program.MasterTileset.UpdateFromChildren();
+				File.WriteAllBytes(dialog.FileName, Program.MasterTileset.ToByteArray());
+			}
+		}
+
+		private void tilesetInfoToolStripMenuItem_Click(object sender, EventArgs e) {
+			OpenFileDialog dialog = new OpenFileDialog();
+			dialog.Filter = "Tile Set Binaries|*.tsb";
+			if (dialog.ShowDialog() == DialogResult.OK) {
+				byte[] bytes = File.ReadAllBytes(dialog.FileName);
+				try {
+					List<TileData> ltd = Tileset.FromByteArray(bytes);
+					ltd.Sort((o1, o2) => Math.Sign(o1.ID - o2.ID));
+					Program.MasterTileset.TilesData.Clear();
+					Program.MasterTileset.TilesData.AddRange(ltd);
+					Program.MasterTileset.UpdateChildren();
+					this.Redraw();
+				} catch (Exception ex) {
+					Console.WriteLine(ex);
+				}
+			}
+			dialog.Dispose();
 		}
 	}
 }

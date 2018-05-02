@@ -41,5 +41,22 @@ namespace MapBuilder.Tiles {
 			});
 			Childs.Add(child);
         }
+
+		public void UpdateFromChildren() {
+			this.TilesData.Clear();
+			Childs.ForEach(l => l.TilesData.ForEach(k => this.TilesData.Add(k)));
+		}
+
+		public void UpdateChildren() {
+			int cap = this.TilesData.Count;
+			for (int i = Childs.Count - 1; i > 0; i--) {
+				Childs[i].TilesData.Clear();
+				for (int j = Childs[i].StartIndex; j < cap; j++) {
+					TileData data = this.TilesData[j];
+					Childs[i].TilesData.Add(data);
+				}
+				cap = Childs[i].StartIndex;
+			}
+		}
     }
 }

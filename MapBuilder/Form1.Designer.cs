@@ -35,6 +35,9 @@ namespace MapBuilder {
 			this.undoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.mapSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.tilesetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.tilesetInfoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.tilesetInfoToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.tilemapDesigner1 = new MapBuilder.Controls.TilemapDesigner();
 			this.tilesetPalette1 = new MapBuilder.Controls.TilesetPalette();
 			this.menuStrip1.SuspendLayout();
@@ -63,7 +66,8 @@ namespace MapBuilder {
 			// importFromToolStripMenuItem
 			// 
 			this.importFromToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.binairiesToolStripMenuItem});
+            this.binairiesToolStripMenuItem,
+            this.tilesetInfoToolStripMenuItem});
 			this.importFromToolStripMenuItem.Name = "importFromToolStripMenuItem";
 			this.importFromToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.importFromToolStripMenuItem.Text = "Import...";
@@ -71,14 +75,15 @@ namespace MapBuilder {
 			// binairiesToolStripMenuItem
 			// 
 			this.binairiesToolStripMenuItem.Name = "binairiesToolStripMenuItem";
-			this.binairiesToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
+			this.binairiesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.binairiesToolStripMenuItem.Text = "Map";
 			this.binairiesToolStripMenuItem.Click += new System.EventHandler(this.binariesToolStripMenuItem_Click);
 			// 
 			// exportAsToolStripMenuItem
 			// 
 			this.exportAsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.binaryFileToolStripMenuItem});
+            this.binaryFileToolStripMenuItem,
+            this.tilesetInfoToolStripMenuItem1});
 			this.exportAsToolStripMenuItem.Name = "exportAsToolStripMenuItem";
 			this.exportAsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.exportAsToolStripMenuItem.Text = "Export...";
@@ -95,7 +100,8 @@ namespace MapBuilder {
 			this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.undoToolStripMenuItem,
             this.toolStripSeparator1,
-            this.mapSizeToolStripMenuItem});
+            this.mapSizeToolStripMenuItem,
+            this.tilesetToolStripMenuItem});
 			this.editToolStripMenuItem.Name = "editToolStripMenuItem";
 			this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
 			this.editToolStripMenuItem.Text = "Edit";
@@ -118,6 +124,27 @@ namespace MapBuilder {
 			this.mapSizeToolStripMenuItem.Text = "Map size...";
 			this.mapSizeToolStripMenuItem.Click += new System.EventHandler(this.mapSizeToolStripMenuItem_Click);
 			// 
+			// tilesetToolStripMenuItem
+			// 
+			this.tilesetToolStripMenuItem.Name = "tilesetToolStripMenuItem";
+			this.tilesetToolStripMenuItem.Size = new System.Drawing.Size(129, 22);
+			this.tilesetToolStripMenuItem.Text = "Tileset";
+			this.tilesetToolStripMenuItem.Click += new System.EventHandler(this.tilesetToolStripMenuItem_Click);
+			// 
+			// tilesetInfoToolStripMenuItem
+			// 
+			this.tilesetInfoToolStripMenuItem.Name = "tilesetInfoToolStripMenuItem";
+			this.tilesetInfoToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.tilesetInfoToolStripMenuItem.Text = "Tileset Info";
+			this.tilesetInfoToolStripMenuItem.Click += new System.EventHandler(this.tilesetInfoToolStripMenuItem_Click);
+			// 
+			// tilesetInfoToolStripMenuItem1
+			// 
+			this.tilesetInfoToolStripMenuItem1.Name = "tilesetInfoToolStripMenuItem1";
+			this.tilesetInfoToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+			this.tilesetInfoToolStripMenuItem1.Text = "Tileset Info";
+			this.tilesetInfoToolStripMenuItem1.Click += new System.EventHandler(this.tilesetInfoToolStripMenuItem1_Click);
+			// 
 			// tilemapDesigner1
 			// 
 			this.tilemapDesigner1.ActiveLayer = -1;
@@ -129,6 +156,7 @@ namespace MapBuilder {
 			this.tilemapDesigner1.RenderSize = 32;
 			this.tilemapDesigner1.Size = new System.Drawing.Size(856, 576);
 			this.tilemapDesigner1.TabIndex = 1;
+			this.tilemapDesigner1.Tileset = null;
 			// 
 			// tilesetPalette1
 			// 
@@ -174,6 +202,9 @@ namespace MapBuilder {
 		private System.Windows.Forms.ToolStripMenuItem undoToolStripMenuItem;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
 		private System.Windows.Forms.ToolStripMenuItem mapSizeToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem tilesetToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem tilesetInfoToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem tilesetInfoToolStripMenuItem1;
 	}
 }
 
