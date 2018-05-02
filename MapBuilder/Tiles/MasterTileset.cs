@@ -22,23 +22,23 @@ namespace MapBuilder.Tiles {
 				this.AddTileMap(img);
 				child.AddTileMap(img);
 			});
-			//this.AddTileMap(image);
-			//child.AddTileMap(image);
 			Childs.Add(child);
 		}
 
         public void AddChild(String name, int size, params Image[] images) {
-            Tileset child = new Tileset(size);
+			Tileset child = new Tileset(this.TileSize);
             int s = 0;
             Childs.ForEach(ts => s += ts.Tiles.Count);
             child.StartIndex = s;
             child.Name = name;
 			images.ToList().ForEach(img => {
-				this.AddTileMap(img);
-				child.AddTileMap(img);
+				Bitmap bitmap = new Bitmap((img.Width * this.TileSize) / size, (img.Height * this.TileSize) / size);
+				using (Graphics g = Graphics.FromImage(bitmap)) {
+					g.DrawImage(img, new Rectangle(Point.Empty, bitmap.Size), 0, 0, img.Width, img.Height, GraphicsUnit.Pixel);
+				}
+				this.AddTileMap(bitmap);
+				child.AddTileMap(bitmap);
 			});
-			//child.AddTileMap(image);
-			//this.AddTileMap(image);
 			Childs.Add(child);
         }
     }
