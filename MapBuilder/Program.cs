@@ -15,6 +15,8 @@ namespace MapBuilder
         static void Main() {
 			MasterTileset.AddChild(Properties.Resources.Outside, "Outside");
 			MasterTileset.AddChild(Properties.Resources.PlainColors, "Plain Colors");
+            MasterTileset.AddChild(Properties.Resources.TilesConverted, "Manual Convert");
+            MasterTileset.AddChild(Properties.Resources.Tiles48, "Size Test", 48);
 			Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             FormInstance = new Form1();

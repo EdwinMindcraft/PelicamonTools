@@ -12,7 +12,8 @@ namespace MapBuilder.Tiles {
 			this.Childs = new List<Tileset>();
 		}
 
-		public void AddChild(Image image, String name) {
+		public void AddChild(Image image, String name)
+        {
 			this.AddTileMap(image);
 			Tileset child = new Tileset(this.TileSize);
 			int s = 0;
@@ -22,5 +23,17 @@ namespace MapBuilder.Tiles {
 			child.AddTileMap(image);
 			Childs.Add(child);
 		}
-	}
+
+        public void AddChild(Image image, String name, int size)
+        {
+            this.AddTileMap(image);
+            Tileset child = new Tileset(size);
+            int s = 0;
+            Childs.ForEach(ts => s += ts.Tiles.Count);
+            child.StartIndex = s;
+            child.Name = name;
+            child.AddTileMap(image);
+            Childs.Add(child);
+        }
+    }
 }
