@@ -31,12 +31,12 @@ namespace MapBuilder {
 			this.binairiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.exportAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.binaryFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.tilemapDesigner1 = new MapBuilder.Controls.TilemapDesigner();
-			this.tilesetPalette1 = new MapBuilder.Controls.TilesetPalette();
 			this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.undoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.mapSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.tilemapDesigner1 = new MapBuilder.Controls.TilemapDesigner();
+			this.tilesetPalette1 = new MapBuilder.Controls.TilesetPalette();
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -66,13 +66,13 @@ namespace MapBuilder {
             this.binairiesToolStripMenuItem});
 			this.importFromToolStripMenuItem.Name = "importFromToolStripMenuItem";
 			this.importFromToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-			this.importFromToolStripMenuItem.Text = "Import from...";
+			this.importFromToolStripMenuItem.Text = "Import...";
 			// 
 			// binairiesToolStripMenuItem
 			// 
 			this.binairiesToolStripMenuItem.Name = "binairiesToolStripMenuItem";
-			this.binairiesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-			this.binairiesToolStripMenuItem.Text = "Binary File";
+			this.binairiesToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
+			this.binairiesToolStripMenuItem.Text = "Map";
 			this.binairiesToolStripMenuItem.Click += new System.EventHandler(this.binariesToolStripMenuItem_Click);
 			// 
 			// exportAsToolStripMenuItem
@@ -81,38 +81,14 @@ namespace MapBuilder {
             this.binaryFileToolStripMenuItem});
 			this.exportAsToolStripMenuItem.Name = "exportAsToolStripMenuItem";
 			this.exportAsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-			this.exportAsToolStripMenuItem.Text = "Export as...";
+			this.exportAsToolStripMenuItem.Text = "Export...";
 			// 
 			// binaryFileToolStripMenuItem
 			// 
 			this.binaryFileToolStripMenuItem.Name = "binaryFileToolStripMenuItem";
-			this.binaryFileToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
-			this.binaryFileToolStripMenuItem.Text = "Binary File";
-			this.binaryFileToolStripMenuItem.Click += new System.EventHandler(this.binaryFileToolStripMenuItem_Click);
-			// 
-			// tilemapDesigner1
-			// 
-			this.tilemapDesigner1.ActiveLayer = -1;
-			this.tilemapDesigner1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.tilemapDesigner1.Location = new System.Drawing.Point(294, 27);
-			this.tilemapDesigner1.Name = "tilemapDesigner1";
-			this.tilemapDesigner1.RenderSize = 32;
-			this.tilemapDesigner1.Size = new System.Drawing.Size(856, 576);
-			this.tilemapDesigner1.TabIndex = 1;
-			this.tilemapDesigner1.Tileset = null;
-			// 
-			// tilesetPalette1
-			// 
-			this.tilesetPalette1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-			this.tilesetPalette1.AutoScroll = true;
-			this.tilesetPalette1.Location = new System.Drawing.Point(12, 27);
-			this.tilesetPalette1.Name = "tilesetPalette1";
-			this.tilesetPalette1.RenderSize = 32;
-			this.tilesetPalette1.Size = new System.Drawing.Size(276, 576);
-			this.tilesetPalette1.TabIndex = 0;
+			this.binaryFileToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.binaryFileToolStripMenuItem.Text = "Map";
+			this.binaryFileToolStripMenuItem.Click += new System.EventHandler(this.mapExportToolStripMenuItem_Click);
 			// 
 			// editToolStripMenuItem
 			// 
@@ -127,20 +103,43 @@ namespace MapBuilder {
 			// undoToolStripMenuItem
 			// 
 			this.undoToolStripMenuItem.Name = "undoToolStripMenuItem";
-			this.undoToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.undoToolStripMenuItem.Size = new System.Drawing.Size(129, 22);
 			this.undoToolStripMenuItem.Text = "Undo";
 			// 
 			// toolStripSeparator1
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+			this.toolStripSeparator1.Size = new System.Drawing.Size(126, 6);
 			// 
 			// mapSizeToolStripMenuItem
 			// 
 			this.mapSizeToolStripMenuItem.Name = "mapSizeToolStripMenuItem";
-			this.mapSizeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.mapSizeToolStripMenuItem.Size = new System.Drawing.Size(129, 22);
 			this.mapSizeToolStripMenuItem.Text = "Map size...";
 			this.mapSizeToolStripMenuItem.Click += new System.EventHandler(this.mapSizeToolStripMenuItem_Click);
+			// 
+			// tilemapDesigner1
+			// 
+			this.tilemapDesigner1.ActiveLayer = -1;
+			this.tilemapDesigner1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.tilemapDesigner1.Location = new System.Drawing.Point(294, 27);
+			this.tilemapDesigner1.Name = "tilemapDesigner1";
+			this.tilemapDesigner1.RenderSize = 32;
+			this.tilemapDesigner1.Size = new System.Drawing.Size(856, 576);
+			this.tilemapDesigner1.TabIndex = 1;
+			// 
+			// tilesetPalette1
+			// 
+			this.tilesetPalette1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+			this.tilesetPalette1.AutoScroll = true;
+			this.tilesetPalette1.Location = new System.Drawing.Point(12, 27);
+			this.tilesetPalette1.Name = "tilesetPalette1";
+			this.tilesetPalette1.RenderSize = 32;
+			this.tilesetPalette1.Size = new System.Drawing.Size(276, 576);
+			this.tilesetPalette1.TabIndex = 0;
 			// 
 			// Form1
 			// 
