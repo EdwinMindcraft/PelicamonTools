@@ -17,6 +17,8 @@ namespace MapBuilder.Controls {
 		private Bitmap image;
 		private bool dragging;
 
+		private Point cursor;
+
 		public delegate void SelectEvent(int i);
 		public event SelectEvent OnTilePick = new SelectEvent((i) => { });
 
@@ -115,7 +117,6 @@ namespace MapBuilder.Controls {
 					return;
 				Tilemap.Layers[ActiveLayer][x, y] = target;
 				Tilemap.Layers[ActiveLayer].GenerateImage(Program.MasterTileset, RenderSize);
-				//Console.WriteLine("Drawing {0} at L{1}X{2}Y{3}", target, ActiveLayer, x, y);
 				GenerateImage();
 				panel1.Invalidate();
 			} else if (e.Button == MouseButtons.Middle) {
@@ -127,6 +128,9 @@ namespace MapBuilder.Controls {
 
 		private void panel1_Paint(object sender, PaintEventArgs e) {
 			e.Graphics.DrawImage(image, 0, 0);
+			if (ActiveLayer >= 0 && ActiveLayer < this.Tilemap.Layers.Count && cursor.X >= 0 && cursor.Y >= 0 && cursor.X < panel1.Width && cursor.Y < panel1.Height) {
+				e.Graphics.DrawRectangle(Pens.White, new Rectangle(cursor, new Size(RenderSize, RenderSize)));
+			}
 		}
 
 
@@ -161,6 +165,13 @@ namespace MapBuilder.Controls {
 			if (dragging) {
 				Panel_MouseClick(sender, e);
 			}
+			Point t = new Point(e.X, e.Y);
+			t.X -= t.X % RenderSize;
+			t.Y -= t.Y % RenderSize;
+			if (cursor != t) {
+				cursor = t;
+				this.panel1.Invalidate();
+			}
 		}
 
 		private void layerList_SelectedIndexChanged(object sender, EventArgs e) {
@@ -185,6 +196,11 @@ namespace MapBuilder.Controls {
 				this.Tilemap.Layers.RemoveAt(layerList.SelectedIndices[0]);
 				this.Redraw();
 			}
+		}
+
+		private void panel1_MouseLeave(object sender, EventArgs e) {
+			this.cursor = new Point(-1, -1);
+			this.panel1.Invalidate();
 		}
 	}
 }

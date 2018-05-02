@@ -79,5 +79,12 @@ namespace MapBuilder {
 		private void Form1_Resize(object sender, System.EventArgs e) {
 			Redraw();
 		}
+
+		private void mapSizeToolStripMenuItem_Click(object sender, EventArgs e) {
+			DialogMapSize dialog = new DialogMapSize(this.tilemapDesigner1.Tilemap.Width, this.tilemapDesigner1.Tilemap.Height);
+			if (dialog.ShowDialog() == DialogResult.OK) {
+				this.tilemapDesigner1.Tilemap.Size = new System.Drawing.Size(dialog.MapWidth, dialog.MapHeight);
+			}
+		}
 	}
 }
