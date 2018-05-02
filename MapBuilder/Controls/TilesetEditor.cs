@@ -27,6 +27,7 @@ namespace MapBuilder.Controls {
 
 		private TilesetEditionMode mode = TilesetEditionMode.Passage;
 		private Image tilesetImage;
+		private Image circle, cross;
 
 
 		private void UpdateScrollbar() {
@@ -41,6 +42,8 @@ namespace MapBuilder.Controls {
 			this.vScrollBar1.Maximum = max > 0 ? max + this.vScrollBar1.LargeChange : 0;
 			this.vScrollBar1.Value = this.vScrollBar1.Value > this.vScrollBar1.Maximum ? 0 : this.vScrollBar1.Value;
 			this.doubleBufferedPanel1.Location = new Point(0, -this.vScrollBar1.Value * RenderSize);
+			this.circle = Properties.Resources.Circle;
+			this.cross = Properties.Resources.Cross;
 		}
 
 		private void GenerateTilesetImage() {
@@ -119,7 +122,7 @@ namespace MapBuilder.Controls {
 		//Action Functions
 		private void RenderPassage(Graphics g, int tileId, Rectangle target) {
 			TileData data = Tileset[tileId];
-			g.DrawImage(data.Passage ? Properties.Resources.Circle : Properties.Resources.Cross, target);
+			g.DrawImage(data.Passage ? circle : cross, target);
 		}
 
 		private void ClickPassge(int id) {
