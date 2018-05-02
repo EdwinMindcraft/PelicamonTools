@@ -108,6 +108,12 @@
     <Compile Include="Controls\TilemapDesigner.Designer.cs">
       <DependentUpon>TilemapDesigner.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\TilesetEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\TilesetEditor.Designer.cs">
+      <DependentUpon>TilesetEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\TilesetPalette.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -140,6 +146,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\TilemapDesigner.resx">
       <DependentUpon>TilemapDesigner.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\TilesetEditor.resx">
+      <DependentUpon>TilesetEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\TilesetPalette.resx">
       <DependentUpon>TilesetPalette.cs</DependentUpon>
@@ -186,6 +195,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Poke_Centre_interiorfix.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Cross.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Circle.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

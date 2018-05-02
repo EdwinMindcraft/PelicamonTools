@@ -8,10 +8,9 @@ using System.Drawing.Drawing2D;
 
 namespace MapBuilder.Tiles {
 	public class Tileset {
-        public const int DEFAULT_SIZE = 32;
+		public const int LATEST_VERSION = 1;
 
 		public int TileSize { get; set; }
-        public int OldSize { get; set; }
         public List<Image> Tiles { get; set; }
 		public List<TileData> TilesData { get; }
 		public int StartIndex { get; set; }
@@ -19,6 +18,14 @@ namespace MapBuilder.Tiles {
 		public List<Image> TileSetImages { get; }
 		public event EventHandler TileUpdated = new EventHandler((sender, args)=> { });
         public string Name { get; set; }
+		public TileData this[int i] {
+			get {
+				return TilesData[i];
+			}
+			set {
+				TilesData[i] = value;
+			}
+		}
 
 		public Tileset(int tileSize) {
 			this.TileSize = tileSize;
@@ -29,26 +36,15 @@ namespace MapBuilder.Tiles {
 		}
 
 		public void AddTileMap(Image image) {
-            Bitmap bitmap;
-            if (this.TileSize == DEFAULT_SIZE)
-            {
-                bitmap = new Bitmap(image);
-            }
-            else
-            {
-                bitmap = new Bitmap((image.Width * DEFAULT_SIZE) / this.TileSize, (image.Height * DEFAULT_SIZE) / this.TileSize);
-                this.OldSize = this.TileSize;
-                this.TileSize = DEFAULT_SIZE;
-            }
-            ;
-			int currentImageID = TileSetImages.Count;
+            Bitmap bitmap = new Bitmap(image);
+			int currentImageID = TileSetImages.Count + StartIndex;
 			TileSetImages.Add(bitmap);
 			for (int i = 0; i <= image.Height - TileSize; i += TileSize) {
 				for (int j = 0; j <= image.Width - TileSize; j += TileSize) {
                     Rectangle target = new Rectangle(j, i, TileSize, TileSize);
                     Bitmap tmp = bitmap.Clone(target, System.Drawing.Imaging.PixelFormat.DontCare);
 					Tiles.Add(tmp);
-					TilesData.Add(new TileData() { ImageID = currentImageID, X = i / TileSize, Y = j / TileSize, ID = Tiles.Count - 1});
+					TilesData.Add(new TileData(currentImageID, this.StartIndex + Tiles.Count - 1, i / TileSize, j / TileSize));
 				}
 			}
 			if (TileUpdated != null)
@@ -62,30 +58,24 @@ namespace MapBuilder.Tiles {
 		}
 
 		public byte[] ToByteArray() {
-			byte[] bytes = new byte[this.TilesData.Count * 16 + 4];
-			ByteUtils.SetInteger(0, ref bytes, this.TilesData.Count);
+			byte[] bytes = new byte[this.TilesData.Count * TileData.GetSizeForVersion(LATEST_VERSION) + 8];
+			ByteUtils.SetInteger(0, ref bytes, LATEST_VERSION);
+			ByteUtils.SetInteger(4, ref bytes, this.TilesData.Count);
 			for (int i = 0; i < this.TilesData.Count; i++) {
-				int target = 4 + i * 16;
+				int target = 8 + i * TileData.GetSizeForVersion(LATEST_VERSION);
 				TileData td = this.TilesData[i];
-				ByteUtils.SetInteger(target + 0, ref bytes, td.ImageID);
-				ByteUtils.SetInteger(target + 4, ref bytes, td.ID);
-				ByteUtils.SetInteger(target + 8, ref bytes, td.X);
-				ByteUtils.SetInteger(target + 12, ref bytes, td.Y);
+				td.ToByteArray(LATEST_VERSION, ref bytes, target);
 			}
 			return bytes;
 		}
 
 		public static List<TileData> FromByteArray(byte[] bytes) {
-			int size = ByteUtils.GetInteger(0, bytes);
+			int version = ByteUtils.GetInteger(0, bytes);
+			int size = ByteUtils.GetInteger(4, bytes);
 			List<TileData> list = new List<TileData>(size);
 			for (int i = 0; i < size; i++) {
-				int target = 4 + i * 16;
-				list.Add(new TileData {
-					ImageID = ByteUtils.GetInteger(target + 0, bytes),
-					ID = ByteUtils.GetInteger(target + 4, bytes),
-					X = ByteUtils.GetInteger(target + 8, bytes),
-					Y = ByteUtils.GetInteger(target + 12, bytes)
-				});
+				int target = 8 + i * TileData.GetSizeForVersion(version);
+				list.Add(TileData.FromByteArray(version, bytes, target));
 			}
 			return list;
 		}
@@ -96,6 +86,17 @@ namespace MapBuilder.Tiles {
 		public int ID { get; set; }
 		public int X { get; set; }
 		public int Y { get; set; }
+		public bool Passage { get; set; }
+		public bool Animated { get; set; }
+
+		public TileData(int ImageID, int ID, int X, int Y) {
+			this.ImageID = ImageID;
+			this.ID = ID;
+			this.X = X;
+			this.Y = Y;
+			this.Passage = true;
+			this.Animated = false;
+		}
 
 		public static TileData FromJson(JObject token) {
 			TileData tile = new TileData();
@@ -103,6 +104,8 @@ namespace MapBuilder.Tiles {
 			tile.X = (int)token["x"];
 			tile.Y = (int)token["y"];
 			tile.ImageID = (int)token["image_id"];
+			tile.Animated = (bool)token["animated"];
+			tile.Passage = (bool)token["passage"];
 			return tile;
 		}
 
@@ -111,8 +114,46 @@ namespace MapBuilder.Tiles {
 				{ "id", this.ID },
 				{ "x", this.X },
 				{ "y", this.Y },
-				{ "image_id", this.ImageID }
+				{ "image_id", this.ImageID },
+				{ "passage", this.Passage },
+				{ "animated", this.Animated }
 			};
+		}
+
+		public static int GetSizeForVersion(int version) {
+			switch (version) {
+				case 1: return 17;
+				default: return 0;
+			}
+		}
+
+		public void ToByteArray(int version, ref byte[] bytes, int position = 0) {
+			if (version == 1) {
+				ByteUtils.SetInteger(position + 0, ref bytes, this.ImageID);
+				ByteUtils.SetInteger(position + 4, ref bytes, this.ID);
+				ByteUtils.SetInteger(position + 8, ref bytes, this.X);
+				ByteUtils.SetInteger(position + 12, ref bytes, this.Y);
+				byte flags = 0;
+				if (Passage)
+					flags |= 0x1;
+				if (Animated)
+					flags |= 0x2;
+				bytes[position + 16] = flags;
+			}
+		}
+
+		public static TileData FromByteArray(int version, byte[] bytes, int position = 0) {
+			TileData td = new TileData();
+			if (version == 1) {
+				td.ImageID = ByteUtils.GetInteger(position + 0, bytes);
+				td.ID = ByteUtils.GetInteger(position + 4, bytes);
+				td.X = ByteUtils.GetInteger(position + 8, bytes);
+				td.Y = ByteUtils.GetInteger(position + 12, bytes);
+				byte flags = bytes[position + 16];
+				td.Passage = (flags & 0x1) == 0x1;
+				td.Animated = (flags & 0x2) == 0x2;
+			}
+			return td;
 		}
 	}
 }
