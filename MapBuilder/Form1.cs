@@ -38,7 +38,7 @@ namespace MapBuilder {
 			//Lol Just kidding, this whole program is a mess.
 		}
 
-		private void binaryFileToolStripMenuItem_Click(object sender, EventArgs e) {
+		private void mapExportToolStripMenuItem_Click(object sender, EventArgs e) {
 			SaveFileDialog dialog = new SaveFileDialog();
 			dialog.Filter = "Tile Map Binaries|*.tmb";
 			if (dialog.ShowDialog() == DialogResult.OK) {
