@@ -28,7 +28,7 @@ namespace MapBuilder {
 				this.tilesetPalette1.Selected = i;
 				this.tilesetPalette1.Redraw();
 			};
-			this.tilemapDesigner1.Tilemap.UpdateTilemapSize(this.tilesetPalette1.Tileset, this.tilemapDesigner1.RenderSize);
+			this.tilemapDesigner1.Tilemap.UpdateTilemapSize(Program.MasterTileset, this.tilemapDesigner1.RenderSize);
 			this.tilemapDesigner1.ActiveLayer = 0;
 			this.tilemapDesigner1.UpdateLayerList();
 			this.tilemapDesigner1.Redraw();
@@ -54,6 +54,7 @@ namespace MapBuilder {
 				try {
 					Tilemap map = IOUtils.LoadTilemapFromBinaries(bytes);
 					this.tilemapDesigner1.Tilemap = map;
+					this.tilemapDesigner1.Tilemap.UpdateTilemapSize(Program.MasterTileset, this.tilemapDesigner1.RenderSize);
 					this.Redraw();
 				} catch(Exception ex) {
 					Console.WriteLine(ex);

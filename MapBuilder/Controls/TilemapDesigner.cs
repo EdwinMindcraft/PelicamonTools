@@ -9,7 +9,18 @@ namespace MapBuilder.Controls {
 	public partial class TilemapDesigner : UserControl {
 
 		public int RenderSize { get; set; } = 32;
-		public Tilemap Tilemap { get; set; } = new Tilemap(21, 15);
+		public Tilemap Tilemap {
+			get {
+				return tilemap;
+			}
+			set {
+				if (value != null) {
+					value.TilemapUpdated -= Tilemap_TilemapUpdated;
+					value.TilemapUpdated += Tilemap_TilemapUpdated;
+				}
+				this.tilemap = value;
+			}
+		}
 		public Tileset Tileset { get; set; }
 		public int[,] Selected { get; set; } = new int[1, 1] { { 0 } };
 		public int ActiveLayer { get; set; } = -1;
@@ -18,6 +29,7 @@ namespace MapBuilder.Controls {
 		private bool dragging;
 
 		private Point cursor;
+		private Tilemap tilemap = new Tilemap(21, 15);
 
 		public delegate void SelectEvent(int[,] i);
 		public event SelectEvent OnTilePick = new SelectEvent((i) => { });

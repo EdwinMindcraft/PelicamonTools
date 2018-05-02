@@ -56,6 +56,7 @@ namespace MapBuilder.Utils {
 			int w = ByteUtils.GetInteger(4, bytes);
 			int h = ByteUtils.GetInteger(8, bytes);
 			Tilemap map = new Tilemap(w, h);
+			map.UpdateTilemapSize();
 			var inc = 8 + w * h * 4;
 			for (int i = 0; i < s; i++) {
 				map.Layers.Add(LoadLayerFromBinaries(bytes, start: 12 + i * inc));
