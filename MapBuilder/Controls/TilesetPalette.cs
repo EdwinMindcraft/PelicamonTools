@@ -28,15 +28,18 @@ namespace MapBuilder.Controls {
 			this.panel1.Location = new Point(0, -this.vScrollBar1.Value * RenderSize);
 		}
 
-        public delegate void TileSelectEvent(int id, Tileset sender);
+        public delegate void TileSelectEvent(int[,] selected, Tileset sender);
 		public delegate void TilsetSelectEvent(Tileset tileset);
         public event TileSelectEvent OnTileSelect = new TileSelectEvent((id, Tileset) => { });
 		public event TilsetSelectEvent OnTilesetChange = new TilsetSelectEvent((ts) => { });
 
 		public int RenderSize { get; set; } = 64;
 		public int DisplayWidth { get { return (int)Math.Floor((float)panel1.Width / RenderSize); } }
-		public int Selected { get; set; } = -1;
+		public int[,] Selected { get; set; } = new int[0,0]; //PosX, PosY => ID
 		private int selectedTileset = 0;
+		private int[] selectedDraw = new int[4];
+		private bool dragging = false;
+		private int sx, sy;
 
 		public TilesetPalette() {
 			InitializeComponent();
@@ -75,8 +78,10 @@ namespace MapBuilder.Controls {
 					Image tile = Tileset.Tiles[i];
 					e.Graphics.DrawImage(tile, new Rectangle(x, y, RenderSize, RenderSize));
 				}
-				if (Selected != -1) {
-					e.Graphics.DrawRectangle(Pens.White, new Rectangle((Selected % DisplayWidth) * RenderSize, ((Selected - (Selected % DisplayWidth)) / DisplayWidth) * RenderSize, RenderSize - 1, RenderSize - 1));
+				if (Selected.Length != 0) {
+					Rectangle rect = new Rectangle(selectedDraw[0], selectedDraw[1], selectedDraw[2], selectedDraw[3]);
+					if (rect.Height > 0 && rect.Width > 0)
+						e.Graphics.DrawRectangle(Pens.White, rect);
 				}
 			}
 		}
@@ -86,29 +91,82 @@ namespace MapBuilder.Controls {
 			int y = (i - (i % DisplayWidth)) / DisplayWidth;
 			this.panel1.Size = new Size(panel1.Size.Width, y * RenderSize);
 			this.UpdateScrollbar();
+			this.UpdateSelectionBox();
 			panel1.Invalidate();
 		}
 
-		private void panel1_MouseClick(object sender, MouseEventArgs e) {
-			int x = (int)Math.Floor((float)e.X / RenderSize);
-			int y = (int)Math.Floor((float)e.Y / RenderSize);
-			Selected = y * DisplayWidth + x;
-			panel1.Invalidate();
-            if (OnTileSelect != null)
-            {
-                int newSelect = Selected + this.Tileset.StartIndex;
-                OnTileSelect.Invoke(newSelect, this.Tileset);
-            }
+		private void UpdateSelectionBox() {
+			if (Selected.Length > 0) {
+				int x = Selected[0, 0] % DisplayWidth;
+				int y = (Selected[0, 0] - x) / DisplayWidth;
+				this.selectedDraw[0] = x * RenderSize;
+				this.selectedDraw[1] = y * RenderSize;
+				this.selectedDraw[2] = this.Selected.GetLength(0) * RenderSize;
+				this.selectedDraw[3] = this.Selected.GetLength(1) * RenderSize;
+			}
+		}
+
+		private void PostTileSelectEvent() {
+			if (OnTileSelect != null) {
+				int[,] newSelect = new int[this.Selected.GetLength(0), this.Selected.GetLength(1)];
+				for (int i = 0; i < Selected.GetLength(0); i++) {
+					for (int j = 0; j < Selected.GetLength(1); j++) {
+						newSelect[i, j] = this.Selected[i, j] + this.Tileset.StartIndex;
+					}
+				}
+				OnTileSelect.Invoke(newSelect, this.Tileset);
+			}
 		}
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
 			this.selectedTileset = comboBox1.SelectedIndex;
 			panel1.Invalidate();
-			this.Selected = -1;
+			this.Selected = new int[0, 0];
 			if (OnTilesetChange != null)
 				OnTilesetChange.Invoke(Tileset);
 			this.Redraw();
 		}
-    }
+
+		private void panel1_MouseDown(object sender, MouseEventArgs e) {
+			dragging = true;
+			sx = e.X;
+			sy = e.Y;
+		}
+
+		private void panel1_MouseMove(object sender, MouseEventArgs e) {
+			if (dragging) {
+				int sx = (int)Math.Floor((float)Math.Min(e.X, this.sx) / RenderSize);
+				int sy = (int)Math.Floor((float)Math.Min(e.Y, this.sy) / RenderSize);
+				int ex = (int)Math.Ceiling((float)Math.Max(e.X, this.sx) / RenderSize);
+				int ey = (int)Math.Ceiling((float)Math.Max(e.Y, this.sy) / RenderSize);
+				Selected = new int[ex - sx, ey - sy];
+				for (int i = 0; i < Selected.GetLength(0); i++) {
+					for (int j = 0; j < Selected.GetLength(1); j++) {
+						Selected[i, j] = (sy + j) * DisplayWidth + sx + i;
+					}
+				}
+				UpdateSelectionBox();
+				panel1.Invalidate();
+				PostTileSelectEvent();
+			}
+		}
+
+		private void panel1_MouseUp(object sender, MouseEventArgs e) {
+			dragging = false;
+			int sx = (int)Math.Floor((float)Math.Min(e.X, this.sx) / RenderSize);
+			int sy = (int)Math.Floor((float)Math.Min(e.Y, this.sy) / RenderSize);
+			int ex = (int)Math.Ceiling((float)Math.Max(e.X, this.sx) / RenderSize);
+			int ey = (int)Math.Ceiling((float)Math.Max(e.Y, this.sy) / RenderSize);
+			Selected = new int[ex - sx, ey - sy];
+			for (int i = 0; i < Selected.GetLength(0); i++) {
+				for (int j = 0; j < Selected.GetLength(1); j++) {
+					Selected[i, j] = (sy + j) * DisplayWidth + sx + i;
+				}
+			}
+			UpdateSelectionBox();
+			panel1.Invalidate();
+			PostTileSelectEvent();
+		}
+	}
 }

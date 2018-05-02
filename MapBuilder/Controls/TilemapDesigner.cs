@@ -11,13 +11,15 @@ namespace MapBuilder.Controls {
 		public int RenderSize { get; set; } = 32;
 		public Tilemap Tilemap { get; set; } = new Tilemap(21, 15);
 		public Tileset Tileset { get; set; }
-		public int Selected { get; set; } = -1;
+		public int[,] Selected { get; set; } = new int[1, 1] { { 0 } };
 		public int ActiveLayer { get; set; } = -1;
 		private Bitmap background;
 		private Bitmap image;
 		private bool dragging;
 
-		public delegate void SelectEvent(int i);
+		private Point cursor;
+
+		public delegate void SelectEvent(int[,] i);
 		public event SelectEvent OnTilePick = new SelectEvent((i) => { });
 
 		public TilemapDesigner() {
@@ -107,19 +109,26 @@ namespace MapBuilder.Controls {
 				return;
 			int x = (e.X - (e.X % RenderSize)) / RenderSize;
 			int y = (e.Y - (e.Y % RenderSize)) / RenderSize;
-			int target = Selected;
+			int[,] target = Selected;
 			if (e.Button == MouseButtons.Left || e.Button == MouseButtons.Right) {
 				if (e.Button == MouseButtons.Right)
-					target = 0;
-				if (Tilemap.Layers[ActiveLayer][x, y] == target)
+					target = new int[1, 1] { { 0 } };
+				bool flag = false;
+				for (int i = 0; i < target.GetLength(0); i++) {
+					for (int j = 0; j < target.GetLength(1); j++) {
+						if (Tilemap.Layers[ActiveLayer][x + i, y + j] == target[i, j])
+							continue;
+						flag = true;
+						Tilemap.Layers[ActiveLayer][x + i, y + j] = target[i, j];
+					}
+				}
+				if (!flag)
 					return;
-				Tilemap.Layers[ActiveLayer][x, y] = target;
 				Tilemap.Layers[ActiveLayer].GenerateImage(Program.MasterTileset, RenderSize);
-				//Console.WriteLine("Drawing {0} at L{1}X{2}Y{3}", target, ActiveLayer, x, y);
 				GenerateImage();
 				panel1.Invalidate();
 			} else if (e.Button == MouseButtons.Middle) {
-				Selected = Tilemap.Layers[ActiveLayer][x, y];
+				Selected = new int[1, 1] { { Tilemap.Layers[ActiveLayer][x, y] } };
 				if (OnTilePick != null)
 					OnTilePick.Invoke(Selected);
 			}
@@ -127,6 +136,9 @@ namespace MapBuilder.Controls {
 
 		private void panel1_Paint(object sender, PaintEventArgs e) {
 			e.Graphics.DrawImage(image, 0, 0);
+			if (ActiveLayer >= 0 && ActiveLayer < this.Tilemap.Layers.Count && cursor.X >= 0 && cursor.Y >= 0 && cursor.X < panel1.Width && cursor.Y < panel1.Height) {
+				e.Graphics.DrawRectangle(Pens.White, new Rectangle(cursor, new Size(RenderSize * Selected.GetLength(0), RenderSize * Selected.GetLength(1))));
+			}
 		}
 
 
@@ -161,6 +173,13 @@ namespace MapBuilder.Controls {
 			if (dragging) {
 				Panel_MouseClick(sender, e);
 			}
+			Point t = new Point(e.X, e.Y);
+			t.X -= t.X % RenderSize;
+			t.Y -= t.Y % RenderSize;
+			if (cursor != t) {
+				cursor = t;
+				this.panel1.Invalidate();
+			}
 		}
 
 		private void layerList_SelectedIndexChanged(object sender, EventArgs e) {
@@ -185,6 +204,11 @@ namespace MapBuilder.Controls {
 				this.Tilemap.Layers.RemoveAt(layerList.SelectedIndices[0]);
 				this.Redraw();
 			}
+		}
+
+		private void panel1_MouseLeave(object sender, EventArgs e) {
+			this.cursor = new Point(-1, -1);
+			this.panel1.Invalidate();
 		}
 	}
 }

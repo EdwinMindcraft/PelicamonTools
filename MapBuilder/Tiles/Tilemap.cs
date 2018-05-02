@@ -29,8 +29,16 @@ namespace MapBuilder.Tiles {
 				return this.layers;
 			}
 		}
-		public Size Size { get {
+		public Size Size {
+			get {
 				return new Size(width, height);
+			}
+			set {
+				this.prevW = this.width;
+				this.prevH = this.height;
+				this.width = value.Width;
+				this.height = value.Height;
+				this.UpdateTilemapSize();
 			}
 		}
 
