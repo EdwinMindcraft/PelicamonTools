@@ -38,7 +38,7 @@ namespace MapBuilder {
 			//Lol Just kidding, this whole program is a mess.
 		}
 
-		private void binaryFileToolStripMenuItem_Click(object sender, System.EventArgs e) {
+		private void binaryFileToolStripMenuItem_Click(object sender, EventArgs e) {
 			SaveFileDialog dialog = new SaveFileDialog();
 			dialog.Filter = "Tile Map Binaries|*.tmb";
 			if (dialog.ShowDialog() == DialogResult.OK) {
@@ -46,7 +46,7 @@ namespace MapBuilder {
 			}
 		}
 
-		private void binariesToolStripMenuItem_Click(object sender, System.EventArgs e) {
+		private void binariesToolStripMenuItem_Click(object sender, EventArgs e) {
 			OpenFileDialog dialog = new OpenFileDialog();
 			dialog.Filter = "Tile Map Binaries|*.tmb";
 			if (dialog.ShowDialog() == DialogResult.OK) {
@@ -76,7 +76,7 @@ namespace MapBuilder {
 			this.tilemapDesigner1.Redraw();
 		}
 
-		private void Form1_Resize(object sender, System.EventArgs e) {
+		private void Form1_Resize(object sender, EventArgs e) {
 			Redraw();
 		}
 

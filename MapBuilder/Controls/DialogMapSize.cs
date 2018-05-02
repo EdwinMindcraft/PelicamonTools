@@ -40,6 +40,10 @@ namespace MapBuilder.Controls {
 		private void Filter_KeyPress(object sender, KeyPressEventArgs e) {
 			if (!char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar))
 				e.Handled = true;
+			if (e.KeyChar == '\n' || e.KeyChar == '\r') {
+				e.Handled = true;
+				this.buttonOk_Click(sender, new EventArgs());
+			}
 		}
 
 		private void buttonOk_Click(object sender, EventArgs e) {
