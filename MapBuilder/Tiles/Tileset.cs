@@ -46,31 +46,7 @@ namespace MapBuilder.Tiles {
 			for (int i = 0; i <= image.Height - TileSize; i += TileSize) {
 				for (int j = 0; j <= image.Width - TileSize; j += TileSize) {
                     Rectangle target = new Rectangle(j, i, TileSize, TileSize);
-                    Bitmap tmp = null;
-                    try
-                    {
-                        tmp = bitmap.Clone(target, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-                    }
-                    catch (OutOfMemoryException e)
-                    {
-                        int width = (image.Width * DEFAULT_SIZE) / this.OldSize;
-                        int height = (image.Height * DEFAULT_SIZE) / this.OldSize;
-                        Console.Out.WriteLine(width.ToString());
-                        Console.Out.WriteLine(height.ToString());
-                        Console.Out.WriteLine(TileSize);
-                        Console.Out.WriteLine(e.ToString());
-                        Environment.Exit(1);
-                    }
-					if (Tiles.Count == 0) {
-						Graphics g = Graphics.FromImage(tmp);
-                        if (this.TileSize != DEFAULT_SIZE)
-                        {
-                            g.InterpolationMode = InterpolationMode.High;
-                        }
-						g.Clear(Color.Transparent);
-						g.Dispose();
-					}
-
+                    Bitmap tmp = bitmap.Clone(target, System.Drawing.Imaging.PixelFormat.DontCare);
 					Tiles.Add(tmp);
 					TilesData.Add(new TileData() { ImageID = currentImageID, X = i / TileSize, Y = j / TileSize, ID = Tiles.Count - 1});
 				}
