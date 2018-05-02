@@ -1,14 +1,18 @@
 ﻿using System;
+using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Drawing;
 using Newtonsoft.Json.Linq;
 using MapBuilder.Utils;
+using System.Drawing.Drawing2D;
 
 namespace MapBuilder.Tiles {
 	public class Tileset {
+        public const int DEFAULT_SIZE = 32;
 
-		public int TileSize { get; }
-		public List<Image> Tiles { get; set; }
+		public int TileSize { get; set; }
+        public int OldSize { get; set; }
+        public List<Image> Tiles { get; set; }
 		public List<TileData> TilesData { get; }
 		public int StartIndex { get; set; }
         public int Index;
@@ -25,18 +29,48 @@ namespace MapBuilder.Tiles {
 		}
 
 		public void AddTileMap(Image image) {
-			Bitmap bitmap = new Bitmap(image);
+            Bitmap bitmap;
+            if (this.TileSize == DEFAULT_SIZE)
+            {
+                bitmap = new Bitmap(image);
+            }
+            else
+            {
+                bitmap = new Bitmap((image.Width * DEFAULT_SIZE) / this.TileSize, (image.Height * DEFAULT_SIZE) / this.TileSize);
+                this.OldSize = this.TileSize;
+                this.TileSize = DEFAULT_SIZE;
+            }
+            ;
 			int currentImageID = TileSetImages.Count;
 			TileSetImages.Add(bitmap);
 			for (int i = 0; i <= image.Height - TileSize; i += TileSize) {
 				for (int j = 0; j <= image.Width - TileSize; j += TileSize) {
-					Rectangle target = new Rectangle(j, i, TileSize, TileSize);
-					Bitmap tmp = bitmap.Clone(target, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                    Rectangle target = new Rectangle(j, i, TileSize, TileSize);
+                    Bitmap tmp = null;
+                    try
+                    {
+                        tmp = bitmap.Clone(target, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                    }
+                    catch (OutOfMemoryException e)
+                    {
+                        int width = (image.Width * DEFAULT_SIZE) / this.OldSize;
+                        int height = (image.Height * DEFAULT_SIZE) / this.OldSize;
+                        Console.Out.WriteLine(width.ToString());
+                        Console.Out.WriteLine(height.ToString());
+                        Console.Out.WriteLine(TileSize);
+                        Console.Out.WriteLine(e.ToString());
+                        Environment.Exit(1);
+                    }
 					if (Tiles.Count == 0) {
 						Graphics g = Graphics.FromImage(tmp);
+                        if (this.TileSize != DEFAULT_SIZE)
+                        {
+                            g.InterpolationMode = InterpolationMode.High;
+                        }
 						g.Clear(Color.Transparent);
 						g.Dispose();
 					}
+
 					Tiles.Add(tmp);
 					TilesData.Add(new TileData() { ImageID = currentImageID, X = i / TileSize, Y = j / TileSize, ID = Tiles.Count - 1});
 				}
