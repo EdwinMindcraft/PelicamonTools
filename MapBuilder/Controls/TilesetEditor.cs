@@ -26,7 +26,7 @@ namespace MapBuilder.Controls {
 		}
 
 		private TilesetEditionMode mode = TilesetEditionMode.Passage;
-		private Image tilesetImage;
+		private Image tilesetImage, background;
 		private Image circle, cross;
 
 
@@ -47,6 +47,8 @@ namespace MapBuilder.Controls {
 		}
 
 		private void GenerateTilesetImage() {
+			if (tilesetImage != null)
+				tilesetImage.Dispose();
 			int i = Tileset.Tiles.Count;
 			int y = (i - (i % DisplayWidth)) / DisplayWidth;
 			tilesetImage = new Bitmap(RenderSize * DisplayWidth, RenderSize * y);
@@ -60,15 +62,30 @@ namespace MapBuilder.Controls {
 			}
 		}
 
+		private void GenerateBackground() {
+			int h = (Tileset.Tiles.Count - (Tileset.Tiles.Count % DisplayWidth)) / DisplayWidth;
+			background = new Bitmap(RenderSize * DisplayWidth, RenderSize * h);
+			using (Graphics g = Graphics.FromImage(background)) {
+				for (int i = 0; i < doubleBufferedPanel1.Width; i += RenderSize / 2) {
+					for (int j = 0; j < doubleBufferedPanel1.Height; j += RenderSize / 2) {
+						int k = (i * 2) / RenderSize + (j * 2) / RenderSize;
+						g.FillRectangle(k % 2 == 1 ? Brushes.LightGray : Brushes.DarkGray, new Rectangle(i, j, RenderSize / 2, RenderSize / 2));
+					}
+				}
+			}
+		}
+
 		public TilesetEditor() {
 			InitializeComponent();
 			this.comboBox1.Items.AddRange(Program.MasterTileset.Childs.ConvertAll((t) => t.Name).ToArray());
 			this.comboBox1.SelectedIndex = 0;
 			UpdateScrollbar();
+			GenerateBackground();
 			GenerateTilesetImage();
 		}
 
 		private void panel1_Paint(object sender, PaintEventArgs e) {
+			e.Graphics.DrawImage(background, Point.Empty);
 			e.Graphics.DrawImage(tilesetImage, Point.Empty);
 			if (Tileset != null) {
 				for (int i = 0; i < Tileset.Tiles.Count; i++) {
@@ -88,6 +105,7 @@ namespace MapBuilder.Controls {
 
 		private void comboBox1_SelectedIndexChanged(object sender, EventArgs e) {
 			this.UpdateScrollbar();
+			this.GenerateBackground();
 			this.GenerateTilesetImage();
 			this.doubleBufferedPanel1.Invalidate();
 		}

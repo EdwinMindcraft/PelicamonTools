@@ -40,12 +40,28 @@ namespace MapBuilder.Controls {
 		private int[] selectedDraw = new int[4];
 		private bool dragging = false;
 		private int sx, sy;
+		private Image background;
 
 		public TilesetPalette() {
 			InitializeComponent();
 		}
 
-        public void FinishInitialisation()
+		private void GenerateBackground() {
+			if (background != null)
+				background.Dispose();
+			int h = (Tileset.Tiles.Count - (Tileset.Tiles.Count % DisplayWidth)) / DisplayWidth;
+			background = new Bitmap(RenderSize * DisplayWidth, RenderSize * h);
+			using (Graphics g = Graphics.FromImage(background)) {
+				for (int i = 0; i < panel1.Width; i += RenderSize / 2) {
+					for (int j = 0; j < panel1.Height; j += RenderSize / 2) {
+						int k = (i * 2) / RenderSize + (j * 2) / RenderSize;
+						g.FillRectangle(k % 2 == 1 ? Brushes.LightGray : Brushes.DarkGray, new Rectangle(i, j, RenderSize / 2, RenderSize / 2));
+					}
+				}
+			}
+		}
+
+		public void FinishInitialisation()
         {
             foreach (Tileset set in Program.MasterTileset.Childs)
             {
@@ -69,6 +85,7 @@ namespace MapBuilder.Controls {
 		}
 
 		private void panel1_Paint(object sender, PaintEventArgs e) {
+			e.Graphics.DrawImage(background, Point.Empty);
 			if (Tileset != null) {
 				for (int i = 0; i < Tileset.RenderedTiles.Count; i++) {
 					int x = i % DisplayWidth;
@@ -92,6 +109,7 @@ namespace MapBuilder.Controls {
 			this.panel1.Size = new Size(panel1.Size.Width, y * RenderSize);
 			this.UpdateScrollbar();
 			this.UpdateSelectionBox();
+			GenerateBackground();
 			panel1.Invalidate();
 		}
 

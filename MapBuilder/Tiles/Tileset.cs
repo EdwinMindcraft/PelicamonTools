@@ -191,7 +191,6 @@ namespace MapBuilder.Tiles {
 				byte flags = bytes[position + 12];
 				td.Passage = (flags & 0x1) == 0x1;
 				td.Animated = (flags & 0x2) == 0x2;
-
 			}
 			return td;
 		}
