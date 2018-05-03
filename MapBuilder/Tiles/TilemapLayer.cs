@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 
@@ -41,6 +42,8 @@ namespace MapBuilder.Tiles {
 		}
 
 		public void GenerateImage(Tileset tileset, int size) {
+			if (LayerImage != null)
+				LayerImage.Dispose();
 			LayerImage = new Bitmap(width * size, height * size, PixelFormat.Format32bppArgb);
 			Graphics g = Graphics.FromImage(LayerImage);
 			g.Clear(Color.Transparent);
@@ -49,6 +52,11 @@ namespace MapBuilder.Tiles {
 					int tile = tiles[x, y];
 					if (tile < 0 || tile >= tileset.Tiles.Count)
 						continue;
+					if (tileset[tile].Autotile) {
+						tile = tileset[tile].BaseID;
+						tile += (int)GetAutoTileFormat(x, y);
+						tiles[x, y] = tile;
+					}
 					g.DrawImage(tileset.Tiles[tile], new Rectangle(x * size, y * size, size, size));
 				}
 			}
@@ -56,8 +64,48 @@ namespace MapBuilder.Tiles {
 			Console.WriteLine(LayerImage.GetPixel(0, 0));
 		}
 
+		public void UpdateAutotiles() {
+			List<TileData> tileset = Program.MasterTileset.TilesData;
+			int max = Program.MasterTileset.Tiles.Count;
+			for (int x = 0; x < width; x++) {
+				for (int y = 0; y < height; y++) {
+					int tile = tiles[x, y];
+					if (tile < 0 || tile >= max)
+						continue;
+					if (tileset[tile].Autotile) {
+						tile = tileset[tile].BaseID;
+						tile += (int)GetAutoTileFormat(x, y);
+						tiles[x, y] = tile;
+					}
+				}
+			}
+		}
+
+		public void UpdateAutotiles(int x, int y) {
+			List<TileData> tileset = Program.MasterTileset.TilesData;
+			int max = Program.MasterTileset.Tiles.Count;
+			for (int i = -1; i <= 1; i++) {
+				for (int j = -1; j <= 1; j++) {
+					if (x + i < 0 || x + i >= width || y + j < 0 || y + j >= height)
+						continue;
+					int tile = tiles[x + i, y + j];
+					if (tile < 0 || tile >= max)
+						continue;
+					if (tileset[tile].Autotile) {
+						tile = tileset[tile].BaseID;
+						tile += (int)GetAutoTileFormat(x, y);
+						tiles[x, y] = tile;
+					}
+				}
+			}
+		}
+
+
 		public AutoTileFormat GetAutoTileFormat(int x, int y) {
+			List<TileData> tileset = Program.MasterTileset.TilesData;
 			int target = this.tiles[x, y];
+			if (!tileset[target].Autotile)
+				return AutoTileFormat.None;
 			int n = y > 0 ? this.tiles[x, y - 1] : target;
 			int s = y < height - 1 ? this.tiles[x, y + 1] : target;
 			int w = x > 0 ? this.tiles[x - 1, y] : target;
@@ -66,6 +114,15 @@ namespace MapBuilder.Tiles {
 			int ne = y > 0 && x < width - 1 ? this.tiles[x + 1, y - 1] : target;
 			int sw = y < height - 1 && x > 0 ? this.tiles[x - 1, y + 1] : target;
 			int se = y < height - 1 && x < width - 1 ? this.tiles[x + 1, y + 1] : target;
+			target = tileset[target].BaseID;
+			n = tileset[n].BaseID;
+			s = tileset[s].BaseID;
+			w = tileset[w].BaseID;
+			e = tileset[e].BaseID;
+			nw = tileset[nw].BaseID;
+			ne = tileset[ne].BaseID;
+			sw = tileset[sw].BaseID;
+			se = tileset[se].BaseID;
 			AutoTileFormat format = AutoTileFormat.None;
 			if (n == target)
 				format |= AutoTileFormat.ConnectNorth;

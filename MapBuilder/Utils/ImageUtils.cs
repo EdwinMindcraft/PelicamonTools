@@ -13,6 +13,19 @@ namespace MapBuilder.Utils {
 			return input.Clone(rect, System.Drawing.Imaging.PixelFormat.DontCare);
 		}
 
+		public static Bitmap[] SplitForFormat(AutotileImageFormat format, Image source, int tilesize) {
+			int w = format == AutotileImageFormat.RMMV ? 2 * tilesize : format == AutotileImageFormat.RMXP ? 3 * tilesize : tilesize;
+			int h = format == AutotileImageFormat.RMMV ? 3 * tilesize : format == AutotileImageFormat.RMXP ? 4 * tilesize : tilesize;
+			Bitmap bitmap = new Bitmap(source);
+			List<Bitmap> childs = new List<Bitmap>();
+			for (int i = 0; i <= bitmap.Width - w; i += w) {
+				for (int j = 0; j <= bitmap.Height - h; j += h) {
+					childs.Add(SubImage(bitmap, new Rectangle(i, j, w, h)));
+				}
+			}
+			return childs.ToArray();
+		}
+
 		public static Bitmap[] GenerateAutotileBitmaps(AutotileImageFormat format, Image source, int tilesize) {
 			Bitmap bitmap = new Bitmap(source);
 			int half = tilesize / 2;

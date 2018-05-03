@@ -12,12 +12,23 @@ namespace MapBuilder.Tiles {
 
 		public int TileSize { get; set; }
         public List<Image> Tiles { get; set; }
+		public List<Image> RenderedTiles {
+			get {
+				return UsesSpecial ? renderedTiles : Tiles;
+			}
+		}
 		public List<TileData> TilesData { get; }
+		public List<TileData> RenderedTileData {
+			get {
+				return UsesSpecial ? renderedTileData : TilesData;
+			}
+		}
 		public int StartIndex { get; set; }
         public int Index;
-		public List<Image> TileSetImages { get; }
+		//public List<Image> TileSetImages { get; }
 		public event EventHandler TileUpdated = new EventHandler((sender, args)=> { });
         public string Name { get; set; }
+		protected bool UsesSpecial { get; set; } = false;
 		public TileData this[int i] {
 			get {
 				return TilesData[i];
@@ -27,26 +38,32 @@ namespace MapBuilder.Tiles {
 			}
 		}
 
+		protected List<Image> renderedTiles;
+		protected List<TileData> renderedTileData;
+
 		public Tileset(int tileSize) {
 			this.TileSize = tileSize;
 			this.Tiles = new List<Image>();
 			this.TilesData = new List<TileData>();
-			this.TileSetImages = new List<Image>();
+			//this.TileSetImages = new List<Image>();
+			this.renderedTiles = new List<Image>();
+			this.renderedTileData = new List<TileData>();
 			this.StartIndex = 0;
 		}
 
 		public void AddTileMap(Image image) {
             Bitmap bitmap = new Bitmap(image);
-			int currentImageID = TileSetImages.Count + StartIndex;
-			TileSetImages.Add(bitmap);
+			//int currentImageID = TileSetImages.Count + StartIndex;
+			//TileSetImages.Add(bitmap);
 			for (int i = 0; i <= image.Height - TileSize; i += TileSize) {
 				for (int j = 0; j <= image.Width - TileSize; j += TileSize) {
                     Rectangle target = new Rectangle(j, i, TileSize, TileSize);
                     Bitmap tmp = bitmap.Clone(target, System.Drawing.Imaging.PixelFormat.DontCare);
 					Tiles.Add(tmp);
-					TilesData.Add(new TileData(currentImageID, this.StartIndex + Tiles.Count - 1, i / TileSize, j / TileSize));
+					TilesData.Add(new TileData(0, this.StartIndex + Tiles.Count - 1, i / TileSize, j / TileSize));
 				}
 			}
+			bitmap.Dispose();
 			if (TileUpdated != null)
 				TileUpdated.Invoke(this, new EventArgs());
 		}
@@ -88,6 +105,8 @@ namespace MapBuilder.Tiles {
 		public int Y { get; set; }
 		public bool Passage { get; set; }
 		public bool Animated { get; set; }
+		public bool Autotile { get; set; }
+		public int BaseID { get; set; }
 
 		public TileData(int ImageID, int ID, int X, int Y) {
 			this.ImageID = ImageID;
@@ -96,6 +115,8 @@ namespace MapBuilder.Tiles {
 			this.Y = Y;
 			this.Passage = true;
 			this.Animated = false;
+			this.Autotile = false;
+			this.BaseID = -1;
 		}
 
 		public static TileData FromJson(JObject token) {

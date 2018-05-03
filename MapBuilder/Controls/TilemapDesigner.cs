@@ -61,6 +61,7 @@ namespace MapBuilder.Controls {
 
 		public void Redraw(bool layers = true) {
 			this.Tilemap.UpdateTilemapSize(Program.MasterTileset, RenderSize);
+			this.Tilemap.UpdateAutotiles();
 			this.GenerateBackground();
 			this.GenerateImage();
 			if (layers)
@@ -80,6 +81,8 @@ namespace MapBuilder.Controls {
 		}
 
 		private void GenerateImage() {
+			if (image != null)
+				image.Dispose();
 			image = new Bitmap(RenderSize * this.Tilemap.Width, RenderSize * this.Tilemap.Height, PixelFormat.Format32bppArgb);
 			Graphics g = Graphics.FromImage(image);
 			g.DrawImage(background, Point.Empty);
@@ -105,6 +108,8 @@ namespace MapBuilder.Controls {
 		}
 
 		private void GenerateBackground() {
+			if (background != null)
+				background.Dispose();
 			background = new Bitmap(RenderSize * this.Tilemap.Width, RenderSize * this.Tilemap.Height, PixelFormat.Format32bppArgb);
 			Graphics g = Graphics.FromImage(background);
 			for (int i = 0; i < panel1.Width; i += RenderSize / 2) {
@@ -136,6 +141,11 @@ namespace MapBuilder.Controls {
 				}
 				if (!flag)
 					return;
+				for (int i = 0; i < target.GetLength(0); i++) {
+					for (int j = 0; j < target.GetLength(1); j++) {
+						Tilemap.Layers[ActiveLayer].UpdateAutotiles(i, j);
+					}
+				}
 				Tilemap.Layers[ActiveLayer].GenerateImage(Program.MasterTileset, RenderSize);
 				GenerateImage();
 				panel1.Invalidate();

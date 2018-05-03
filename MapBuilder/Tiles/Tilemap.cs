@@ -66,11 +66,16 @@ namespace MapBuilder.Tiles {
 				l.width = width;
 				l.height = height;
 				l.UpdateLayerSize();
+				l.UpdateAutotiles();
 				if (ts != null)
 					l.GenerateImage(ts, size);
 			});
 			if (TilemapUpdated != null)
 				TilemapUpdated.Invoke(this, new EventArgs());
+		}
+
+		public void UpdateAutotiles() {
+			layers.ForEach((l) => l.UpdateAutotiles());
 		}
 	}
 	/// <summary>

@@ -16,7 +16,7 @@ namespace MapBuilder.Controls {
         }
 
 		private void UpdateScrollbar() {
-			int i = Tileset.Tiles.Count;
+			int i = Tileset.RenderedTiles.Count;
 			int y = (i - (i % DisplayWidth)) / DisplayWidth;
 			int max = y - (panel2.Height - (panel2.Height % RenderSize)) / RenderSize;
 			this.vScrollBar1.Enabled = max > 0;
@@ -70,12 +70,12 @@ namespace MapBuilder.Controls {
 
 		private void panel1_Paint(object sender, PaintEventArgs e) {
 			if (Tileset != null) {
-				for (int i = 0; i < Tileset.Tiles.Count; i++) {
+				for (int i = 0; i < Tileset.RenderedTiles.Count; i++) {
 					int x = i % DisplayWidth;
 					int y = (i - x) / DisplayWidth;
 					x *= RenderSize;
 					y *= RenderSize;
-					Image tile = Tileset.Tiles[i];
+					Image tile = Tileset.RenderedTiles[i];
 					e.Graphics.DrawImage(tile, new Rectangle(x, y, RenderSize, RenderSize));
 				}
 				if (Selected.Length != 0) {
@@ -87,7 +87,7 @@ namespace MapBuilder.Controls {
 		}
 
 		public void Redraw() {
-			int i = Tileset.Tiles.Count;
+			int i = Tileset.RenderedTiles.Count;
 			int y = (i - (i % DisplayWidth)) / DisplayWidth;
 			this.panel1.Size = new Size(panel1.Size.Width, y * RenderSize);
 			this.UpdateScrollbar();
@@ -108,13 +108,14 @@ namespace MapBuilder.Controls {
 
 		private void PostTileSelectEvent() {
 			if (OnTileSelect != null) {
+				/*
 				int[,] newSelect = new int[this.Selected.GetLength(0), this.Selected.GetLength(1)];
 				for (int i = 0; i < Selected.GetLength(0); i++) {
 					for (int j = 0; j < Selected.GetLength(1); j++) {
-						newSelect[i, j] = this.Selected[i, j] + this.Tileset.StartIndex;
+						newSelect[i, j] = this.Selected[i, j];
 					}
-				}
-				OnTileSelect.Invoke(newSelect, this.Tileset);
+				}*/
+				OnTileSelect.Invoke(Selected, this.Tileset);
 			}
 		}
 
@@ -136,16 +137,7 @@ namespace MapBuilder.Controls {
 
 		private void panel1_MouseMove(object sender, MouseEventArgs e) {
 			if (dragging) {
-				int sx = (int)Math.Floor((float)Math.Min(e.X, this.sx) / RenderSize);
-				int sy = (int)Math.Floor((float)Math.Min(e.Y, this.sy) / RenderSize);
-				int ex = (int)Math.Ceiling((float)Math.Max(e.X, this.sx) / RenderSize);
-				int ey = (int)Math.Ceiling((float)Math.Max(e.Y, this.sy) / RenderSize);
-				Selected = new int[ex - sx, ey - sy];
-				for (int i = 0; i < Selected.GetLength(0); i++) {
-					for (int j = 0; j < Selected.GetLength(1); j++) {
-						Selected[i, j] = (sy + j) * DisplayWidth + sx + i;
-					}
-				}
+				SelectArea(e.X, e.Y);
 				UpdateSelectionBox();
 				panel1.Invalidate();
 				PostTileSelectEvent();
@@ -154,19 +146,24 @@ namespace MapBuilder.Controls {
 
 		private void panel1_MouseUp(object sender, MouseEventArgs e) {
 			dragging = false;
-			int sx = (int)Math.Floor((float)Math.Min(e.X, this.sx) / RenderSize);
-			int sy = (int)Math.Floor((float)Math.Min(e.Y, this.sy) / RenderSize);
-			int ex = (int)Math.Ceiling((float)Math.Max(e.X, this.sx) / RenderSize);
-			int ey = (int)Math.Ceiling((float)Math.Max(e.Y, this.sy) / RenderSize);
-			Selected = new int[ex - sx, ey - sy];
-			for (int i = 0; i < Selected.GetLength(0); i++) {
-				for (int j = 0; j < Selected.GetLength(1); j++) {
-					Selected[i, j] = (sy + j) * DisplayWidth + sx + i;
-				}
-			}
+			SelectArea(e.X, e.Y);
 			UpdateSelectionBox();
 			panel1.Invalidate();
 			PostTileSelectEvent();
+		}
+
+		private void SelectArea(int x, int y) {
+			int sx = (int)Math.Floor((float)Math.Min(x, this.sx) / RenderSize);
+			int sy = (int)Math.Floor((float)Math.Min(y, this.sy) / RenderSize);
+			int ex = (int)Math.Ceiling((float)Math.Max(x, this.sx) / RenderSize);
+			int ey = (int)Math.Ceiling((float)Math.Max(y, this.sy) / RenderSize);
+			Selected = new int[ex - sx, ey - sy];
+			for (int i = 0; i < Selected.GetLength(0); i++) {
+				for (int j = 0; j < Selected.GetLength(1); j++) {
+					Selected[i, j] = Tileset.RenderedTileData[(sy + j) * DisplayWidth + sx + i].ID;
+					Console.WriteLine("({0},{1}): {2}", i, j, Selected[i, j]);
+				}
+			}
 		}
 	}
 }

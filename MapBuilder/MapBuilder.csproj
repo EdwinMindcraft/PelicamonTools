@@ -134,6 +134,7 @@
     <Compile Include="SubWindows\UpdateChecker.Designer.cs">
       <DependentUpon>UpdateChecker.cs</DependentUpon>
     </Compile>
+    <Compile Include="Tiles\AutoTileset.cs" />
     <Compile Include="Tiles\MasterTileset.cs" />
     <Compile Include="Tiles\Tilemap.cs" />
     <Compile Include="Tiles\TilemapLayer.cs" />
