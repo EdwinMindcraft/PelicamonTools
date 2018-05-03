@@ -140,6 +140,7 @@
     <Compile Include="Tiles\Tileset.cs" />
     <Compile Include="Utils\ByteUtils.cs" />
     <Compile Include="Utils\GitUtils.cs" />
+    <Compile Include="Utils\ImageUtils.cs" />
     <Compile Include="Utils\IOUtils.cs" />
     <EmbeddedResource Include="Controls\DialogMapSize.resx">
       <DependentUpon>DialogMapSize.cs</DependentUpon>
@@ -201,6 +202,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Circle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Pokemon_A2.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

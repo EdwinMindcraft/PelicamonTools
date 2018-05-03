@@ -55,5 +55,45 @@ namespace MapBuilder.Tiles {
 			g.Dispose();
 			Console.WriteLine(LayerImage.GetPixel(0, 0));
 		}
+
+		public AutoTileFormat GetAutoTileFormat(int x, int y) {
+			int target = this.tiles[x, y];
+			int n = y > 0 ? this.tiles[x, y - 1] : target;
+			int s = y < height - 1 ? this.tiles[x, y + 1] : target;
+			int w = x > 0 ? this.tiles[x - 1, y] : target;
+			int e = x < width - 1 ? this.tiles[x + 1, y] : target;
+			int nw = y > 0 && x > 0 ? this.tiles[x - 1, y - 1] : target;
+			int ne = y > 0 && x < width - 1 ? this.tiles[x + 1, y - 1] : target;
+			int sw = y < height - 1 && x > 0 ? this.tiles[x - 1, y + 1] : target;
+			int se = y < height - 1 && x < width - 1 ? this.tiles[x + 1, y + 1] : target;
+			AutoTileFormat format = AutoTileFormat.None;
+			if (n == target)
+				format |= AutoTileFormat.ConnectNorth;
+			if (s == target)
+				format |= AutoTileFormat.ConnectSouth;
+			if (w == target)
+				format |= AutoTileFormat.ConnectWest;
+			if (e == target)
+				format |= AutoTileFormat.ConnectEast;
+			if (nw == target)
+				format |= AutoTileFormat.ConnectNorthWest;
+			if (ne == target)
+				format |= AutoTileFormat.ConnectNorthEast;
+			if (sw == target)
+				format |= AutoTileFormat.ConnectSouthWest;
+			if (se == target)
+				format |= AutoTileFormat.ConnectSouthEast;
+			return format;
+		}
+
+		public AutoTileFormat[,] GetTileLinks() {
+			AutoTileFormat[,] tiles = new AutoTileFormat[this.width, this.height];
+			for (int i = 0; i < this.width; i++) {
+				for (int j = 0; j < this.height; j++) {
+					tiles[i, j] = GetAutoTileFormat(i, j);
+				}
+			}
+			return tiles;
+		}
 	}
 }

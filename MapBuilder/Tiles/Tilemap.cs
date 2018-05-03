@@ -73,4 +73,18 @@ namespace MapBuilder.Tiles {
 				TilemapUpdated.Invoke(this, new EventArgs());
 		}
 	}
+	/// <summary>
+	/// 1 Autotiles => 256 Regular tiles
+	/// </summary>
+	public enum AutoTileFormat {
+		None = 0,
+		ConnectNorth = 0x1,
+		ConnectSouth = 0x2,
+		ConnectEast = 0x4,
+		ConnectWest = 0x8,
+		ConnectNorthEast = 0x10,
+		ConnectSouthEast = 0x20,
+		ConnectNorthWest = 0x40,
+		ConnectSouthWest = 0x80,
+	}
 }
