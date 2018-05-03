@@ -8,7 +8,7 @@ using System.Drawing.Drawing2D;
 
 namespace MapBuilder.Tiles {
 	public class Tileset {
-		public const int LATEST_VERSION = 1;
+		public const int LATEST_VERSION = 2;
 
 		public int TileSize { get; set; }
         public List<Image> Tiles { get; set; }
@@ -60,7 +60,7 @@ namespace MapBuilder.Tiles {
                     Rectangle target = new Rectangle(j, i, TileSize, TileSize);
                     Bitmap tmp = bitmap.Clone(target, System.Drawing.Imaging.PixelFormat.DontCare);
 					Tiles.Add(tmp);
-					TilesData.Add(new TileData(0, this.StartIndex + Tiles.Count - 1, i / TileSize, j / TileSize));
+					TilesData.Add(new TileData(this.StartIndex + Tiles.Count - 1, i / TileSize, j / TileSize));
 				}
 			}
 			bitmap.Dispose();
@@ -99,7 +99,6 @@ namespace MapBuilder.Tiles {
 	}
 
 	public struct TileData {
-		public int ImageID { get; set; }
 		public int ID { get; set; }
 		public int X { get; set; }
 		public int Y { get; set; }
@@ -108,8 +107,7 @@ namespace MapBuilder.Tiles {
 		public bool Autotile { get; set; }
 		public int BaseID { get; set; }
 
-		public TileData(int ImageID, int ID, int X, int Y) {
-			this.ImageID = ImageID;
+		public TileData(int ID, int X, int Y) {
 			this.ID = ID;
 			this.X = X;
 			this.Y = Y;
@@ -119,12 +117,16 @@ namespace MapBuilder.Tiles {
 			this.BaseID = -1;
 		}
 
+		public void LoadUnsavedDataFrom(TileData other) {
+			this.BaseID = other.BaseID;
+			this.Autotile = other.Autotile;
+		}
+
 		public static TileData FromJson(JObject token) {
 			TileData tile = new TileData();
 			tile.ID = (int)token["id"];
 			tile.X = (int)token["x"];
 			tile.Y = (int)token["y"];
-			tile.ImageID = (int)token["image_id"];
 			tile.Animated = (bool)token["animated"];
 			tile.Passage = (bool)token["passage"];
 			return tile;
@@ -135,7 +137,6 @@ namespace MapBuilder.Tiles {
 				{ "id", this.ID },
 				{ "x", this.X },
 				{ "y", this.Y },
-				{ "image_id", this.ImageID },
 				{ "passage", this.Passage },
 				{ "animated", this.Animated }
 			};
@@ -144,13 +145,14 @@ namespace MapBuilder.Tiles {
 		public static int GetSizeForVersion(int version) {
 			switch (version) {
 				case 1: return 17;
+				case 2: return 13;
 				default: return 0;
 			}
 		}
 
 		public void ToByteArray(int version, ref byte[] bytes, int position = 0) {
 			if (version == 1) {
-				ByteUtils.SetInteger(position + 0, ref bytes, this.ImageID);
+				ByteUtils.SetInteger(position + 0, ref bytes, 0);
 				ByteUtils.SetInteger(position + 4, ref bytes, this.ID);
 				ByteUtils.SetInteger(position + 8, ref bytes, this.X);
 				ByteUtils.SetInteger(position + 12, ref bytes, this.Y);
@@ -160,19 +162,36 @@ namespace MapBuilder.Tiles {
 				if (Animated)
 					flags |= 0x2;
 				bytes[position + 16] = flags;
+			} else if (version == 2) {
+				ByteUtils.SetInteger(position + 0, ref bytes, this.ID);
+				ByteUtils.SetInteger(position + 4, ref bytes, this.X);
+				ByteUtils.SetInteger(position + 8, ref bytes, this.Y);
+				byte flags = 0;
+				if (Passage)
+					flags |= 0x1;
+				if (Animated)
+					flags |= 0x2;
+				bytes[position + 12] = flags;
 			}
 		}
 
 		public static TileData FromByteArray(int version, byte[] bytes, int position = 0) {
 			TileData td = new TileData();
 			if (version == 1) {
-				td.ImageID = ByteUtils.GetInteger(position + 0, bytes);
 				td.ID = ByteUtils.GetInteger(position + 4, bytes);
 				td.X = ByteUtils.GetInteger(position + 8, bytes);
 				td.Y = ByteUtils.GetInteger(position + 12, bytes);
 				byte flags = bytes[position + 16];
 				td.Passage = (flags & 0x1) == 0x1;
 				td.Animated = (flags & 0x2) == 0x2;
+			} else if (version == 2) {
+				td.ID = ByteUtils.GetInteger(position + 0, bytes);
+				td.X = ByteUtils.GetInteger(position + 4, bytes);
+				td.Y = ByteUtils.GetInteger(position + 8, bytes);
+				byte flags = bytes[position + 12];
+				td.Passage = (flags & 0x1) == 0x1;
+				td.Animated = (flags & 0x2) == 0x2;
+
 			}
 			return td;
 		}

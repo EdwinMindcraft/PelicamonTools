@@ -61,7 +61,6 @@ namespace MapBuilder.Tiles {
 				}
 			}
 			g.Dispose();
-			Console.WriteLine(LayerImage.GetPixel(0, 0));
 		}
 
 		public void UpdateAutotiles() {

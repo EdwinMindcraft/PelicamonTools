@@ -161,7 +161,6 @@ namespace MapBuilder.Controls {
 			for (int i = 0; i < Selected.GetLength(0); i++) {
 				for (int j = 0; j < Selected.GetLength(1); j++) {
 					Selected[i, j] = Tileset.RenderedTileData[(sy + j) * DisplayWidth + sx + i].ID;
-					Console.WriteLine("({0},{1}): {2}", i, j, Selected[i, j]);
 				}
 			}
 		}

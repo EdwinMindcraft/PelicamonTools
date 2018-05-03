@@ -115,8 +115,17 @@ namespace MapBuilder {
 				try {
 					List<TileData> ltd = Tileset.FromByteArray(bytes);
 					ltd.Sort((o1, o2) => Math.Sign(o1.ID - o2.ID));
-					Program.MasterTileset.TilesData.Clear();
-					Program.MasterTileset.TilesData.AddRange(ltd);
+					//Program.MasterTileset.TilesData.Clear();
+					//Program.MasterTileset.TilesData.AddRange(ltd);
+					foreach (TileData td in ltd) {
+						TileData ntd = td;
+						int id = td.ID;
+						if (id < 0 || id > Program.MasterTileset.TilesData.Count)
+							break; //Sorted ascending.
+						TileData source = Program.MasterTileset.TilesData[id];
+						ntd.LoadUnsavedDataFrom(source);
+						Program.MasterTileset.TilesData[id] = ntd;
+					}
 					Program.MasterTileset.UpdateChildren();
 					this.Redraw();
 				} catch (Exception ex) {

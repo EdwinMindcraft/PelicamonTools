@@ -58,7 +58,5 @@ namespace MapBuilder.Utils
             }
             return false;
         }
-
-
     }
 }
