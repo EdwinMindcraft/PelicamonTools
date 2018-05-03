@@ -15,32 +15,43 @@ namespace MapBuilder.SubWindows
 {
     public partial class UpdateChecker : Form
     {
+
+        public delegate void UpdateFinishEvent();
+        public event UpdateFinishEvent OnUpdateFinish = new UpdateFinishEvent(() => { });
+
         public UpdateChecker()
         {
             InitializeComponent();
             this.Icon = Properties.Resources.PeliMakerIcon;
+            this.OnUpdateFinish += ExitToMain;
             //progressBar1.Style = ProgressBarStyle.Marquee;
             //progressBar1.MarqueeAnimationSpeed = 30;
-
-
         }
 
+        private void ExitToMain()
+        {
+            Invoke(new Action(() =>
+            {
+                this.Close();
+            }
+            ));
+
+        }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            this.Close();
-            System.Windows.Forms.Application.Exit();
+            ExitToMain();
         }
+
+
 
         private void UpdateChecker_Shown(object sender, EventArgs e)
         {
             progressBar1.Style = ProgressBarStyle.Marquee;
-            progressBar1.MarqueeAnimationSpeed = 300;
+            progressBar1.MarqueeAnimationSpeed = 10;
             Thread th = new Thread(FetchUpdate);
             th.Start();
-            th.Join();
-            progressBar1.MarqueeAnimationSpeed = 0;
-            this.Close();
+            //th.Join();
         }
 
         private void FetchUpdate()
@@ -64,11 +75,13 @@ namespace MapBuilder.SubWindows
                 {
                     Console.Out.WriteLine("Current version matches latest release");
                 }
+                OnUpdateFinish.Invoke();
 
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Seems like an error occured, please verify your connection and try again. \n If the problem still occurs, please contact EdwinMindcraft or Edern via Discord with the following error report attached. \n \n" + ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                OnUpdateFinish.Invoke();
                 return;
             }
         }
