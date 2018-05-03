@@ -178,7 +178,10 @@ namespace MapBuilder.Controls {
 			Selected = new int[ex - sx, ey - sy];
 			for (int i = 0; i < Selected.GetLength(0); i++) {
 				for (int j = 0; j < Selected.GetLength(1); j++) {
-					Selected[i, j] = Tileset.RenderedTileData[(sy + j) * DisplayWidth + sx + i].ID;
+					int id = (sy + j) * DisplayWidth + sx + i;
+					if (id < 0 || id >= Tileset.RenderedTileData.Count)
+						continue;
+					Selected[i, j] = Tileset.RenderedTileData[id].ID;
 				}
 			}
 		}
