@@ -83,6 +83,32 @@ namespace MapBuilder.Utils {
 						g.DrawImage(se, locSE);
 					}
 				}
+				#region Memory cleanup
+				cornerNW.Dispose();
+				cornerNE.Dispose();
+				cornerSW.Dispose();
+				cornerSE.Dispose();
+				//Inners
+				innerNW.Dispose();
+				innerNE.Dispose();
+				innerSW.Dispose();
+				innerSE.Dispose();
+				//Outers
+				outerNW.Dispose();
+				outerNE.Dispose();
+				outerSW.Dispose();
+				outerSE.Dispose();
+				//Verticals
+				vertNW.Dispose();
+				vertNE.Dispose();
+				vertSW.Dispose();
+				vertSE.Dispose();
+				//Horizontals
+				horizNW.Dispose();
+				horizNE.Dispose();
+				horizSW.Dispose();
+				horizSE.Dispose();
+				#endregion
 			} else if (format == AutotileImageFormat.RMXP) {
 
 			}
