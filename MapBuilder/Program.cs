@@ -28,7 +28,7 @@ namespace MapBuilder {
             MasterTileset.AddChild("Manual Convert", Properties.Resources.TilesConverted);
             MasterTileset.AddChild("Size Test", 48, Properties.Resources.Tiles48);
             MasterTileset.AddChild("Poke Center", Properties.Resources.Poke_Centre_interiorfix);
-			MasterTileset.AddAutoChild("Autotiles", 48, AutotileImageFormat.RMMV, Properties.Resources.Pokemon_A2);
+			MasterTileset.AddAutoChild("Autotiles", 48, AutotileImageFormat.RMMV, Properties.Resources.PokemonfixJ2_A2);
 			//MasterTileset.AddChild("Rendered Autotile", 48, ImageUtils.GenerateAutotileBitmaps(AutotileImageFormat.RMMV, ImageUtils.SubImage(Properties.Resources.Pokemon_A2, new System.Drawing.Rectangle(96*2, 0, 96, 144)), 48));
             FormInstance = new Form1();
             Application.Run(FormInstance);

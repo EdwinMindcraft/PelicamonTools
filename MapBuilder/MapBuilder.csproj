@@ -207,5 +207,8 @@
   <ItemGroup>
     <None Include="Resources\Pokemon_A2.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PokemonfixJ2_A2.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
