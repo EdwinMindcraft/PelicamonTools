@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Drawing.Imaging;
+using System.Collections.Generic;
 
 namespace MapBuilder.Controls {
 	public partial class TilemapDesigner : UserControl {
@@ -127,16 +128,21 @@ namespace MapBuilder.Controls {
 			int x = (e.X - (e.X % RenderSize)) / RenderSize;
 			int y = (e.Y - (e.Y % RenderSize)) / RenderSize;
 			int[,] target = Selected;
+			List<TileData> tds = Program.MasterTileset.TilesData;
 			if (e.Button == MouseButtons.Left || e.Button == MouseButtons.Right) {
 				if (e.Button == MouseButtons.Right)
 					target = new int[1, 1] { { 0 } };
 				bool flag = false;
 				for (int i = 0; i < target.GetLength(0); i++) {
 					for (int j = 0; j < target.GetLength(1); j++) {
-						if (Tilemap.Layers[ActiveLayer][x + i, y + j] == target[i, j])
+						int t = target[i, j];
+						int t2 = Tilemap.Layers[ActiveLayer][x + i, y + j];
+						if (t2 == t)
+							continue;
+						if (t >= 0 && t2 >= 0 && tds[t].Autotile && tds[t2].Autotile && tds[t].BaseID == tds[t2].BaseID)
 							continue;
 						flag = true;
-						Tilemap.Layers[ActiveLayer][x + i, y + j] = target[i, j];
+						Tilemap.Layers[ActiveLayer][x + i, y + j] = t;
 					}
 				}
 				if (!flag)
