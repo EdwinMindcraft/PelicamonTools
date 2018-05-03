@@ -18,9 +18,10 @@ namespace MapBuilder.SubWindows
         public UpdateChecker()
         {
             InitializeComponent();
+            this.Icon = Properties.Resources.PeliMakerIcon;
             //progressBar1.Style = ProgressBarStyle.Marquee;
             //progressBar1.MarqueeAnimationSpeed = 30;
-            
+
 
         }
 

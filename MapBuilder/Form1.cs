@@ -13,6 +13,7 @@ namespace MapBuilder {
 
         public Form1() {
 			InitializeComponent();
+            this.Icon = Properties.Resources.PeliMakerIcon;
 			//SANITY WARNING
 			//The following code might hurt your soul/eyes/brain (delete as appropriate) due to its ugliness
 			//Creators of this code is not responsible for any kind of physical/emotional/mental/other damage caused by it
