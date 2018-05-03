@@ -94,7 +94,7 @@ namespace MapBuilder.Tiles {
 					if (tileset[tile].Autotile) {
 						tile = tileset[tile].BaseID;
 						tile += (int)GetAutoTileFormat(x, y);
-						tiles[x, y] = tile;
+						tiles[x + i, y + j] = tile;
 					}
 				}
 			}
