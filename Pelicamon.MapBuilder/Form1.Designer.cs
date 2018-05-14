@@ -1,4 +1,4 @@
-﻿using MapBuilder.Controls;
+﻿using Pelicamon.MapBuilder.Controls;
 
 namespace Pelicamon.MapBuilder {
 	partial class Form1 {

@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Windows.Forms;
-using MapBuilder.Utils;
+using Pelicamon.MapBuilder.Utils;
 using Octokit;
 
 namespace Pelicamon.MapBuilder.SubWindows
