@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using Newtonsoft.Json.Linq;
 using Pelicamon.Common.Utils;
-using System.Drawing.Drawing2D;
 
 namespace Pelicamon.Common.Tiles {
 	public class Tileset {

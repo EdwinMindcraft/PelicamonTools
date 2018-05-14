@@ -49,5 +49,11 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Pelicamon.Common\Pelicamon.Common.csproj">
+      <Project>{91a878a2-a154-4fb9-aa78-de52f8e4bb38}</Project>
+      <Name>Pelicamon.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
